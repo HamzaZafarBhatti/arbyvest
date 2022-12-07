@@ -2,19 +2,19 @@
 <html class="no-js" lang="en">
 
 <head>
-    <title>Admin Login | Arbyvest</title>
+    <title>Admin Login | {{ $set->site_name }}</title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1" />
     <meta name="robots" content="index, follow">
-    <meta name="apple-mobile-web-app-title" content="arbyvest" />
-    <meta name="application-name" content="arbyvest" />
+    <meta name="apple-mobile-web-app-title" content="{{ $set->title }}" />
+    <meta name="application-name" content="{{ $set->title }}" />
     <meta name="msapplication-TileColor" content="#ffffff" />
-    <meta name="description" content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, illo?" />
-    <link rel="shortcut icon" href="{{ asset('asset/images/favicon.jpg') }}" />
-    <link rel="apple-touch-icon" href="{{ asset('asset/images/favicon.jpg') }}" />
-    <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('asset/images/favicon.jpg') }}" />
-    <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('asset/images/favicon.jpg') }}" />
+    <meta name="description" content="{{ $set->site_desc }}" />
+    <link rel="shortcut icon" href="{{ asset('asset/images/'.$set->favicon) }}" />
+    <link rel="apple-touch-icon" href="{{ asset('asset/images/'.$set->favicon) }}" />
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('asset/images/'.$set->favicon) }}" />
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('asset/images/'.$set->favicon) }}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700&display=swap">
     <link rel="stylesheet" href="{{ asset('asset/admin/vendor/nucleo/css/nucleo.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('asset/admin/vendor/@fortawesome/fontawesome-free/css/all.min.css') }}"
@@ -27,7 +27,7 @@
     <nav id="navbar-main" class="navbar navbar-horizontal navbar-transparent navbar-main navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand" href="{{ route('admin.dashboard') }}">
-                <img src="{{ asset('asset/images/logo.png') }}" />
+                <img src="{{ asset('asset/images/'.$set->logo) }}" />
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse"
                 aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@
                     <div class="row">
                         <div class="col-6 collapse-brand">
                             <a href="{{ route('admin.dashboard') }}">
-                                <img src="{{ asset('asset/images/logo.png') }}">
+                                <img src="{{ asset('asset/images/'.$set->logo) }}">
                             </a>
                         </div>
                         <div class="col-6 collapse-close">
@@ -62,7 +62,7 @@
                 <div class="header-body text-center mb-7">
                     <div class="row justify-content-center">
                         <div class="col-xl-5 col-lg-6 col-md-8 px-5">
-                            <h1 class="text-white">Login</h1>
+                            <h1 class="text-white">Admin Login</h1>
                         </div>
                     </div>
                 </div>
@@ -116,8 +116,8 @@
             <div class="row align-items-center justify-content-xl-between">
                 <div class="col-xl-6">
                     <div class="copyright text-center text-xl-left text-muted">
-                        <a href="{{ url('/') }}" class="font-weight-bold ml-1"><span
-                                class="text-yellow">Arbyvest</span></a> &copy; {{ date('Y') }}. All
+                        <a href="{{ route('admin.dashboard') }}" class="font-weight-bold ml-1"><span
+                                class="text-yellow">{{ $set->site_name }}</span></a> &copy; {{ date('Y') }}. All
                         Rights Reserved.
                     </div>
                 </div>

@@ -47,7 +47,10 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function() {
     Route::prefix('admin')->name('admin.')->group(function() {
+        Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
         Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('account', [AdminController::class, 'account'])->name('account');
+        Route::post('account', [AdminController::class, 'account_update'])->name('account.update');
     });
 });
 
