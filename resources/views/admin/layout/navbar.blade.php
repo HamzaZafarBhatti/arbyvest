@@ -27,14 +27,14 @@
         </ul>
         <span class="navbar-text ml-md-3 mr-md-auto">
             <span class="badge badge-mark border-orange-300 mr-2"></span>
-            Welcome back, {{ auth()->user()->username }}
+            Welcome back, {{ auth()->user()->name }}
         </span>
 
         <ul class="navbar-nav">
             <li class="nav-item dropdown dropdown-user">
                 <a href="#" class="navbar-nav-link dropdown-toggle" data-toggle="dropdown">
                     <img src="{{asset('asset/images/react.jpg')}}" class="rounded-circle" alt="">
-                    <span>{{ auth()->user()->username }}</span>
+                    <span>{{ auth()->user()->name }}</span>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-right">
