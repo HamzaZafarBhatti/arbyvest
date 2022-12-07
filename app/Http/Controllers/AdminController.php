@@ -29,4 +29,10 @@ class AdminController extends Controller
     {
         return view('admin.dashboard');
     }
+
+    public function logout()
+    {
+        Auth::guard()->logout();
+        return redirect()->route('admin.login')->with('success', 'Just Logged Out!');
+    }
 }
