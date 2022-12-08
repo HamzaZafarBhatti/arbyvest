@@ -27,13 +27,14 @@
         <!-- Main sidebar -->
         @include('admin.layout.sidebar')
         <div class="content-wrapper">
-            <div class="page-header page-header-light">
+            <div class="page-header page-header-light mb-3">
                 <div class="page-header-content header-elements-md-inline">
                     <div class="page-title d-flex">
                         <h4><span class="font-weight-semibold">{{ $set->title }}</span></h4>
                     </div>
                 </div>
             </div>
+            @include('admin.alert')
             @yield('content')
         </div>
 </body>

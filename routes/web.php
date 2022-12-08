@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,9 +17,10 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 
-Route::name('front.')->controller(FrontController::class)->group(function() {
+Route::name('front.')->controller(FrontController::class)->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/about', 'about')->name('about');
     Route::get('/services', 'services')->name('services');
@@ -31,9 +33,13 @@ Route::name('front.')->controller(FrontController::class)->group(function() {
     Route::get('/support', 'support')->name('support');
 });
 Route::middleware('guest')->group(function () {
-    Route::prefix('admin')->name('admin.')->group(function() {
+    Route::prefix('arbyvestadministrativepanel')->name('admin.')->group(function () {
         Route::get('login', [AdminController::class, 'login'])->name('login');
         Route::post('login', [AdminController::class, 'do_login'])->name('do_login');
+    });
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('login', [UserController::class, 'login'])->name('login');
+        Route::post('login', [UserController::class, 'do_login'])->name('do_login');
     });
     // Route::get('register', [RegisteredUserController::class, 'create'])
     //             ->name('register');
@@ -58,12 +64,19 @@ Route::middleware('guest')->group(function () {
     //             ->name('password.store');
 });
 
-Route::middleware('auth')->group(function() {
-    Route::prefix('admin')->name('admin.')->group(function() {
-        Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
-        Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
-        Route::get('account', [AdminController::class, 'account'])->name('account');
-        Route::post('account', [AdminController::class, 'account_update'])->name('account.update');
+Route::middleware('auth')->group(function () {
+    Route::prefix('arbyvestadministrativepanel')->name('admin.')->group(function () {
+        Route::controller(AdminController::class)->group(function () {
+            Route::get('/logout', 'logout')->name('logout');
+            Route::get('/', 'dashboard')->name('dashboard');
+            Route::get('account', 'account')->name('account');
+            Route::post('account', 'account_update')->name('account.update');
+        });
+        Route::controller(SettingController::class)->name('settings.')->group(function () {
+            Route::get('settings', 'settings')->name('index');
+            Route::post('settings', 'settings_update')->name('update');
+            Route::post('update_logo_favicon', 'update_logo_favicon')->name('update_logo_favicon');
+        });
     });
 });
 

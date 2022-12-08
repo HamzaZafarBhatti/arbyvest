@@ -51,35 +51,35 @@
 
 
         <!-- Main navigation -->
-        {{-- <div class="card card-sidebar-mobile">
+        <div class="card card-sidebar-mobile">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
 
                 <!-- Main -->
                 <li class="nav-item">
-                    <a href="{{ route('admin.dashboard') }}" class="nav-link">
+                    <a href="{{ route('admin.dashboard') }}" class="nav-link @if(Route::is('admin.dashboard')) active @endif">
                         <i class="icon-home4"></i>
                         <span>
                             Dashboard
                         </span>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('admin.banks.index') }}" class="nav-link">
                         <i class="icon-home"></i>
                         <span>
                             Banks
                         </span>
                     </a>
-                </li>
-                <li class="nav-item">
+                </li> --}}
+                {{-- <li class="nav-item">
                     <a href="{{ route('admin.account_types.index') }}" class="nav-link">
                         <i class="icon-home"></i>
                         <span>
                             Account Types
                         </span>
                     </a>
-                </li>
-                <li class="nav-item nav-item-submenu">
+                </li> --}}
+                {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-user-plus"></i> <span>User
                             Manangement</span></a>
 
@@ -87,23 +87,26 @@
                         <li class="nav-item"><a href="{{ route('admin.users') }}" class="nav-link"><i
                                     class="icon-user"></i> Client accounts</a></li>
                     </ul>
-                </li>
-                <li class="nav-item nav-item-submenu">
+                </li> --}}
+                <li class="nav-item nav-item-submenu @if(Route::is('admin.settings.*')) nav-item-open @endif">
                     <a href="#" class="nav-link"><i class="icon-cogs spinner"></i> <span>System
                             configuration</span></a>
-                    <ul class="nav nav-group-sub" data-submenu-title="System configuration">
-                        <li class="nav-item"><a href="{{ route('admin.settings.index') }}" class="nav-link"><i
-                                    class="icon-hammer-wrench"></i>Settings</a></li>
-                        <li class="nav-item"><a href="{{ route('admin.email') }}" class="nav-link"><i
+                    <ul class="nav nav-group-sub" data-submenu-title="System configuration" @if(Route::is('admin.settings.*')) style="display: block" @endif>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.settings.index') }}" class="nav-link @if(Route::is('admin.settings.index')) active @endif">
+                                <i class="icon-hammer-wrench"></i>Settings
+                            </a>
+                        </li>
+                        {{-- <li class="nav-item"><a href="{{ route('admin.email') }}" class="nav-link"><i
                                     class="icon-envelope"></i>Email</a></li>
                         <li class="nav-item"><a href="{{ route('admin.sms') }}" class="nav-link"><i
                                     class="icon-bubble"></i>Sms</a></li>
                         <li class="nav-item"><a href="{{ route('admin.account') }}" class="nav-link"><i
-                                    class="icon-user"></i>Account information</a>
+                                    class="icon-user"></i>Account information</a> --}}
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item nav-item-submenu">
+                {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-pulse2"></i>
                         <span>MLM Plans</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="PY scheme">
@@ -114,8 +117,8 @@
                         <li class="nav-item"><a href="{{ route('admin.mlm-coupons.index') }}" class="nav-link"><i
                                     class="icon-add"></i>Generate Coupons</a></li>
                     </ul>
-                </li>
-                <li class="nav-item nav-item-submenu">
+                </li> --}}
+                {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-pulse2"></i>
                         <span>Investment</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="PY scheme">
@@ -126,8 +129,8 @@
                         <li class="nav-item"><a href="{{ route('admin.coupons.index') }}" class="nav-link"><i
                                     class="icon-add"></i>Generate Coupons</a></li>
                     </ul>
-                </li>
-                <li class="nav-item nav-item-submenu">
+                </li> --}}
+                {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-share2"></i><span>Affiliate Balance
                             Withdraw
                             system</span></a>
@@ -145,8 +148,8 @@
                                 class="nav-link"><i class="icon-accessibility"></i>Declined
                                 withdrawal</a></li>
                     </ul>
-                </li>
-                <li class="nav-item nav-item-submenu">
+                </li> --}}
+                {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-share2"></i><span>MLM Balance Wallet
                             Withdraw
                             system</span></a>
@@ -164,8 +167,8 @@
                                 class="nav-link"><i class="icon-accessibility"></i>Declined
                                 withdrawal</a></li>
                     </ul>
-                </li>
-                <li class="nav-item nav-item-submenu">
+                </li> --}}
+                {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-share2"></i><span>Referral Balance
                             Wallet
                             Withdraw
@@ -184,8 +187,8 @@
                                 class="nav-link"><i class="icon-accessibility"></i>Declined
                                 withdrawal</a></li>
                     </ul>
-                </li>
-                <li class="nav-item nav-item-submenu">
+                </li> --}}
+                {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-share2"></i><span>Paymentproof
                             system</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="Paymentproof">
@@ -202,8 +205,8 @@
                                 class="nav-link"><i class="icon-accessibility"></i>Declined
                                 paymentproof</a></li>
                     </ul>
-                </li>
-                <li class="nav-item nav-item-submenu">
+                </li> --}}
+                {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-magazine"></i> <span>News
                             Section</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="News Section">
@@ -212,8 +215,8 @@
                         <li class="nav-item"><a href="{{ route('admin.blog.index') }}" class="nav-link"><i
                                     class="icon-newspaper"></i>Articles</a></li>
                     </ul>
-                </li>
-                <li class="nav-item nav-item-submenu">
+                </li> --}}
+                {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-home4"></i> <span>Web
                             control</span></a>
 
@@ -234,9 +237,9 @@
                         <li class="nav-item"><a href="{{ route('admin.social-links') }}" class="nav-link"><i
                                     class="icon-share2"></i>Social Links</a></li>
                     </ul>
-                </li>
+                </li> --}}
             </ul>
-        </div> --}}
+        </div>
         <!-- /main navigation -->
 
     </div>

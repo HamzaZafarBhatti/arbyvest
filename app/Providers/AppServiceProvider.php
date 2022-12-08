@@ -28,8 +28,5 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Schema::defaultStringLength(191);
-        $data['set'] = Setting::first();
-
-        View::share($data);
     }
 }

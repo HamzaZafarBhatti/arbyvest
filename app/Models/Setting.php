@@ -9,6 +9,9 @@ class Setting extends Model
 {
     use HasFactory;
 
+    protected $logo_path = 'asset/images/';
+    protected $favicon_path = 'asset/images/';
+
     protected $fillable = [
         'title',
         'site_name',
@@ -19,4 +22,14 @@ class Setting extends Model
         'favicon',
         'logo',
     ];
+
+    public function getLogoPath()
+    {
+        return $this->logo_path;
+    }
+
+    public function getFaviconPath()
+    {
+        return $this->favicon_path;
+    }
 }
