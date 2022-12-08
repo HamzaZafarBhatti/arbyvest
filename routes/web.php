@@ -40,6 +40,8 @@ Route::middleware('guest')->group(function () {
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('login', [UserController::class, 'login'])->name('login');
         Route::post('login', [UserController::class, 'do_login'])->name('do_login');
+        Route::get('register', [UserController::class, 'register'])->name('register');
+        Route::post('register', [UserController::class, 'do_register'])->name('do_register');
     });
     // Route::get('register', [RegisteredUserController::class, 'create'])
     //             ->name('register');
@@ -69,6 +71,20 @@ Route::middleware('auth')->group(function () {
         Route::controller(AdminController::class)->group(function () {
             Route::get('/logout', 'logout')->name('logout');
             Route::get('/', 'dashboard')->name('dashboard');
+            Route::get('account', 'account')->name('account');
+            Route::post('account', 'account_update')->name('account.update');
+        });
+        Route::controller(SettingController::class)->name('settings.')->group(function () {
+            Route::get('settings', 'settings')->name('index');
+            Route::post('settings', 'settings_update')->name('update');
+            Route::post('update_logo_favicon', 'update_logo_favicon')->name('update_logo_favicon');
+        });
+    });
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::controller(UserController::class)->group(function () {
+            Route::get('/logout', 'logout')->name('logout');
+            Route::get('/', 'dashboard')->name('dashboard');
+            Route::get('dashboard', 'dashboard')->name('dashboard');
             Route::get('account', 'account')->name('account');
             Route::post('account', 'account_update')->name('account.update');
         });
