@@ -21,6 +21,6 @@ class IsAdmin
         if($role == 'Admin') {
             return $next($request);
         }
-        return 'meow';
+        abort(403);
     }
 }

@@ -35,6 +35,24 @@
                                                 <div class="col-md-12">
                                                     <div class="form-floating mb-3">
                                                         <input type="text"
+                                                            class="form-control @if ($errors->get('username')) is-invalid @endif"
+                                                            id="username" name="username" value="{{ old('username') }}"
+                                                            placeholder="Username" required>
+                                                        <label for="username">Username</label>
+                                                        @if ($errors->get('username'))
+                                                            <div class="invalid-feedback">
+                                                                <ul>
+                                                                    @foreach ((array) $errors->get('username') as $message)
+                                                                        <li>{{ $message }}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-floating mb-3">
+                                                        <input type="text"
                                                             class="form-control @if ($errors->get('name')) is-invalid @endif"
                                                             id="name" name="name" value="{{ old('name') }}"
                                                             placeholder="Name" required>
@@ -69,6 +87,24 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
+                                                    <div class="form-floating mb-3">
+                                                        <input type="text"
+                                                            class="form-control @if ($errors->get('phone')) is-invalid @endif"
+                                                            id="phone" name="phone" value="{{ old('phone') }}"
+                                                            placeholder="Phone" required>
+                                                        <label for="phone">Phone</label>
+                                                        @if ($errors->get('phone'))
+                                                            <div class="invalid-feedback">
+                                                                <ul>
+                                                                    @foreach ((array) $errors->get('phone') as $message)
+                                                                        <li>{{ $message }}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
                                                     <div class="form-floating mb-2">
                                                         <input type="password"
                                                             class="form-control @if ($errors->get('password')) is-invalid @endif"
@@ -94,6 +130,26 @@
                                                         <label for="password_confirmation">Confirm Password</label>
                                                     </div>
                                                 </div>
+                                                @if ($referral)
+                                                    <div class="col-md-12">
+                                                        <div class="form-floating mb-3">
+                                                            <input type="text"
+                                                                class="form-control @if ($errors->get('referral')) is-invalid @endif"
+                                                                id="referral" name="referral" value="{{ $referral }}"
+                                                                placeholder="Referral" readonly required>
+                                                            <label for="referral">Referral</label>
+                                                            @if ($errors->get('referral'))
+                                                                <div class="invalid-feedback">
+                                                                    <ul>
+                                                                        @foreach ((array) $errors->get('referral') as $message)
+                                                                            <li>{{ $message }}</li>
+                                                                        @endforeach
+                                                                    </ul>
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             </div>
                                             <div class="text-center">
                                                 <button type="submit" class="btn btn-primary">Sign Up</button>

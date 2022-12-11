@@ -34,10 +34,12 @@ Route::name('front.')->controller(FrontController::class)->group(function () {
     Route::get('/support', 'support')->name('support');
 });
 Route::middleware('guest')->group(function () {
+    // Admin
     Route::prefix('arbyvestadministrativepanel')->name('admin.')->group(function () {
         Route::get('login', [AdminController::class, 'login'])->name('login');
         Route::post('login', [AdminController::class, 'do_login'])->name('do_login');
     });
+    // User
     Route::prefix('app')->name('user.')->group(function () {
         Route::get('login', [UserController::class, 'login'])->name('login');
         Route::post('login', [UserController::class, 'do_login'])->name('do_login');
@@ -60,6 +62,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    // Admin
     Route::middleware('admin')->prefix('arbyvestadministrativepanel')->name('admin.')->group(function () {
         Route::controller(AdminController::class)->group(function () {
             Route::get('/logout', 'logout')->name('logout');
@@ -74,6 +77,7 @@ Route::middleware('auth')->group(function () {
         });
         Route::resource('banks', BankController::class)->except('create', 'show');
     });
+    // User
     Route::middleware('user')->prefix('app')->name('user.')->group(function () {
         Route::controller(UserController::class)->group(function () {
             Route::get('/logout', 'logout')->name('logout');
@@ -90,5 +94,3 @@ Route::middleware('auth')->group(function () {
 //     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
-
-// require __DIR__.'/auth.php';

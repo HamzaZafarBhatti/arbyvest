@@ -20,6 +20,6 @@ class IsUser
         if($role == 'User') {
             return $next($request);
         }
-        return 'meow';
+        abort(403);
     }
 }

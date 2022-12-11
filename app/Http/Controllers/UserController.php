@@ -27,26 +27,33 @@ class UserController extends Controller
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
-    public function register()
+    public function register(Request $request)
     {
-        return view('user.auth.register');
+        $referral = $request->referral;
+        return view('user.auth.register', compact('referral'));
     }
 
     public function do_register(Request $request)
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:'.User::class],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'phone' => ['required', 'max:50'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
+            'username' => $request->username,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => bcrypt($request->password),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
         ]);
+
+        $user->assignRole('User');
 
         Auth::login($user);
 
