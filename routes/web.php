@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BankController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
@@ -37,21 +38,13 @@ Route::middleware('guest')->group(function () {
         Route::get('login', [AdminController::class, 'login'])->name('login');
         Route::post('login', [AdminController::class, 'do_login'])->name('do_login');
     });
-    Route::prefix('user')->name('user.')->group(function () {
+    Route::prefix('app')->name('user.')->group(function () {
         Route::get('login', [UserController::class, 'login'])->name('login');
         Route::post('login', [UserController::class, 'do_login'])->name('do_login');
         Route::get('register', [UserController::class, 'register'])->name('register');
         Route::post('register', [UserController::class, 'do_register'])->name('do_register');
     });
-    // Route::get('register', [RegisteredUserController::class, 'create'])
-    //             ->name('register');
 
-    // Route::post('register', [RegisteredUserController::class, 'store']);
-
-    // Route::get('login', [AuthenticatedSessionController::class, 'create'])
-    //             ->name('login');
-
-    // Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
     // Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
     //             ->name('password.request');
@@ -67,7 +60,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::prefix('arbyvestadministrativepanel')->name('admin.')->group(function () {
+    Route::middleware('admin')->prefix('arbyvestadministrativepanel')->name('admin.')->group(function () {
         Route::controller(AdminController::class)->group(function () {
             Route::get('/logout', 'logout')->name('logout');
             Route::get('/', 'dashboard')->name('dashboard');
@@ -79,8 +72,9 @@ Route::middleware('auth')->group(function () {
             Route::post('settings', 'settings_update')->name('update');
             Route::post('update_logo_favicon', 'update_logo_favicon')->name('update_logo_favicon');
         });
+        Route::resource('banks', BankController::class)->except('create', 'show');
     });
-    Route::prefix('user')->name('user.')->group(function () {
+    Route::middleware('user')->prefix('app')->name('user.')->group(function () {
         Route::controller(UserController::class)->group(function () {
             Route::get('/logout', 'logout')->name('logout');
             Route::get('/', 'dashboard')->name('dashboard');
@@ -88,19 +82,8 @@ Route::middleware('auth')->group(function () {
             Route::get('account', 'account')->name('account');
             Route::post('account', 'account_update')->name('account.update');
         });
-        Route::controller(SettingController::class)->name('settings.')->group(function () {
-            Route::get('settings', 'settings')->name('index');
-            Route::post('settings', 'settings_update')->name('update');
-            Route::post('update_logo_favicon', 'update_logo_favicon')->name('update_logo_favicon');
-        });
     });
 });
-
-// Route::get('/', [UserController::class, 'dashboard'])->name('user.dashboard');
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Route::middleware('auth')->group(function () {
 //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

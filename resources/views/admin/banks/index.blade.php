@@ -1,7 +1,8 @@
-@extends('admin.master')
+@extends('admin.layout.master')
+
+@section('title', 'Banks')
 
 @section('content')
-
     <div class="content">
         <div class="row">
             <div class="col-md-12">
@@ -16,18 +17,29 @@
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Name:</label>
                                 <div class="col-lg-10">
-                                    <input type="text" name="name" class="form-control" reqiured>
+                                    <input type="text" name="name" class="form-control" value="{{ old('name') }}"
+                                        required>
+                                    @if ($errors->get('name'))
+                                        <div class="text-danger">
+                                            <p>{{ $errors->get('name')[0] }}</p>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Status:</label>
                                 <div class="col-lg-10">
-                                    <select class="form-control select" name="status">
-                                        <option value="1">Active
-                                        </option>
-                                        <option value="0">Disable
-                                        </option>
+                                    <select class="form-control select" name="is_active" value="{{ old('is_active') }}"
+                                        required>
+                                        <option value="">Select Status</option>
+                                        <option value="1">Active</option>
+                                        <option value="0">Deactived</option>
                                     </select>
+                                    @if ($errors->get('is_active'))
+                                        <div class="text-danger">
+                                            <p>{{ $errors->get('is_active')[0] }}</p>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="text-right">
@@ -60,9 +72,9 @@
                                         <td>{{ ++$k }}.</td>
                                         <td>{{ $val->name }}</td>
                                         <td>
-                                            @if ($val->status == 0)
+                                            @if ($val->is_active == 0)
                                                 <span class="badge badge-danger">Disabled</span>
-                                            @elseif($val->status == 1)
+                                            @elseif($val->is_active == 1)
                                                 <span class="badge badge-success">Active</span>
                                             @endif
                                         </td>
@@ -75,9 +87,16 @@
                                                         <i class="icon-menu9"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class='dropdown-item'
-                                                            href="{{ route('admin.banks.edit', $val->id) }}"><i
-                                                                class="icon-pencil7 mr-2"></i>Edit</a>
+                                                        <a class='dropdown-item' href="{{ route('admin.banks.edit', $val->id) }}">
+                                                            <i class="icon-pencil7 mr-2"></i>Edit
+                                                        </a>
+                                                        <a class='dropdown-item' href="{{ route('admin.banks.destroy', $val->id) }}" onclick='event.preventDefault(); document.getElementById("form{{$val->id}}").submit()'>
+                                                            <i class="icon-trash mr-2"></i>Delete
+                                                        </a>
+                                                        <form action="{{ route('admin.banks.destroy', $val->id) }}" method="post" id="form{{ $val->id }}" style="display: none">
+                                                            @csrf
+                                                            @method('delete')
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -91,5 +110,4 @@
             </div>
         </div>
     </div>
-
 @stop

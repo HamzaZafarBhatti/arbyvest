@@ -63,14 +63,14 @@
                         </span>
                     </a>
                 </li>
-                {{-- <li class="nav-item">
+                <li class="nav-item">
                     <a href="{{ route('admin.banks.index') }}" class="nav-link">
                         <i class="icon-home"></i>
                         <span>
                             Banks
                         </span>
                     </a>
-                </li> --}}
+                </li>
                 {{-- <li class="nav-item">
                     <a href="{{ route('admin.account_types.index') }}" class="nav-link">
                         <i class="icon-home"></i>

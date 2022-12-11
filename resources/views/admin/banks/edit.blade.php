@@ -1,4 +1,6 @@
-@extends('admin.master')
+@extends('admin.layout.master')
+
+@section('title', 'Edit Bank')
 
 @section('content')
     <div class="content">
@@ -16,25 +18,32 @@
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Name:</label>
                                 <div class="col-lg-10">
-                                    <input type="text" name="name" class="form-control" value="{{ $bank->name }}"
-                                        reqiured>
-                                    <input type="hidden" name="id" value="{{ $bank->id }}">
+                                    <input type="text" name="name" class="form-control" value="{{ $bank->name }}" required>
+                                    @if ($errors->get('name'))
+                                        <div class="text-danger">
+                                            <p>{{ $errors->get('name')[0] }}</p>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Status:</label>
                                 <div class="col-lg-10">
-                                    <select class="form-control select" name="status">
-                                        <option value="1" @if ($bank->status == 1) selected @endif>Active
-                                        </option>
-                                        <option value="0" @if ($bank->status == 0) selected @endif>Deactive
-                                        </option>
+                                    <select class="form-control select" name="is_active" required>
+                                        <option value="">Select Status</option>
+                                        <option value="1" @if ($bank->is_active == 1) selected @endif>Active</option>
+                                        <option value="0" @if ($bank->is_active == 0) selected @endif>Deactived</option>
                                     </select>
+                                    @if ($errors->get('is_active'))
+                                        <div class="text-danger">
+                                            <p>{{ $errors->get('is_active')[0] }}</p>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="text-right">
-                                <button type="submit" class="btn bg-dark">Submit<i
-                                        class="icon-paperbanke ml-2"></i></button>
+                                <button type="submit" class="btn bg-dark">Update<i
+                                        class="icon-paperplane ml-2"></i></button>
                             </div>
                         </form>
                     </div>

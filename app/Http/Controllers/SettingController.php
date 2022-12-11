@@ -19,6 +19,7 @@ class SettingController extends Controller
         try {
             $setting = Setting::first();
             $data = $request->except('_method', '_token');
+            cache()->forget('set');
             $setting->update($data);
             return redirect()->route('admin.settings.index')->with('success', 'Settings updated!');
         } catch (\Throwable $th) {
