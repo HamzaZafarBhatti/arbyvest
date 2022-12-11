@@ -81,7 +81,6 @@ Route::middleware('auth')->group(function () {
     Route::middleware('user')->prefix('app')->name('user.')->group(function () {
         Route::controller(UserController::class)->group(function () {
             Route::get('/logout', 'logout')->name('logout');
-            Route::get('/', 'dashboard')->name('dashboard');
             Route::get('dashboard', 'dashboard')->name('dashboard');
             Route::get('account', 'account')->name('account');
             Route::post('account', 'account_update')->name('account.update');
