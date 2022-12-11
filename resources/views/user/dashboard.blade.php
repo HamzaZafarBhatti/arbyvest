@@ -125,9 +125,10 @@
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="card shining-card">
-                                <div class="card-body">
+                                <div class="card-body text-center text-md-start">
                                     <img src="{{ asset('asset/user/images/flags/usa.svg') }}"
                                         class="img-fluid avatar avatar-70" alt="img60">
+                                    <br class="d-block d-md-none">
                                     <span class="fs-5 me-2">US Dollars</span>
                                     <small><a href="#">wallet</a></small>
                                     <div class="pt-2">
@@ -149,9 +150,10 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="card shining-card">
-                                <div class="card-body">
+                                <div class="card-body text-center text-md-start">
                                     <img src="{{ asset('asset/user/images/flags/uk.svg') }}"
                                         class="img-fluid avatar avatar-70" alt="img60">
+                                    <br class="d-block d-md-none">
                                     <span class="fs-5 me-2">British Pound</span>
                                     <small><a href="#">wallet</a></small>
                                     <div class="pt-2">
@@ -173,9 +175,10 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="card shining-card">
-                                <div class="card-body">
+                                <div class="card-body text-center text-md-start">
                                     <img src="{{ asset('asset/user/images/flags/nigeria.svg') }}"
                                         class="img-fluid avatar avatar-70" alt="img60">
+                                    <br class="d-block d-md-none">
                                     <span class="fs-5 me-2">Nigerian Naira</span>
                                     <small><a href="#">wallet</a></small>
                                     <div class="pt-2">
@@ -191,13 +194,13 @@
                             </div>
                         </div>
                         <div class="col-lg-12">
-                            <div class="card">
+                            <div class="card text-center text-md-start">
                                 <div class="card-header">
                                     <div class="header-title ">
                                         <h4 class="card-title text-danger">Please Complete your Account Verification</h4>
                                     </div>
                                 </div>
-                                <div class="card-body text-center text-md-start">
+                                <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-9 col-12">
                                             <h6>
@@ -217,7 +220,7 @@
                             </div>
                         </div>
                         <div class="col-lg-12">
-                            <div class="card">
+                            <div class="card text-center text-md-start">
                                 <div class="row">
                                     <div class="col-md-9 col-12">
                                         <div class="card-header">
@@ -225,7 +228,7 @@
                                                 <h4 class="card-title text-success">Your Account is FULLY VERIFIED</h4>
                                             </div>
                                         </div>
-                                        <div class="card-body text-center text-md-start">
+                                        <div class="card-body">
                                             <h6>
                                                 You can trade on the Black Market and Withdraw without Limits on this
                                                 account.
@@ -240,7 +243,7 @@
                             </div>
                         </div>
                         <div class="col-lg-12">
-                            <div class="card">
+                            <div class="card text-center text-md-start">
                                 <div class="card-header">
                                     <div class="header-title ">
                                         <h4 class="card-title">Sell Dollars or Pounds on the BLACK MARKET</h4>
@@ -249,11 +252,9 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="text-center text-md-start">
-                                        <p class="h5 text-success">Minimum amount: $10/£10</p>
-                                        <p class="h5 text-success">Maximum amount: $35000/£35000</p>
-                                        <p class="h5 text-success">Enter Amount & Click on "SELL NOW".</p>
-                                    </div>
+                                    <p class="h5 text-success">Minimum amount: $10/£10</p>
+                                    <p class="h5 text-success">Maximum amount: $35000/£35000</p>
+                                    <p class="h5 text-success">Enter Amount & Click on "SELL NOW".</p>
                                     <div class="pt-3">
                                         <div class="row align-items-center">
                                             <div class="col-md-4 col-12">
@@ -341,7 +342,8 @@
                         <li class="d-flex  align-items-center pt-3">
                             <div class="d-flex justify-content-between rounded-pill">
                                 <div class="ms-3 flex-grow-1">
-                                    <h6 class="mb-2">-₦56,990 Withdrawal successfully from NGN Wallet to Bank Account</h6>
+                                    <h6 class="mb-2">-₦56,990 Withdrawal successfully from NGN Wallet to Bank Account
+                                    </h6>
                                     <p class="text-primary mb-2">11/02/21</p>
                                 </div>
                             </div>
