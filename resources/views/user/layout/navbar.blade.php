@@ -180,13 +180,14 @@
                         <img src="{{asset('asset/user/images/avatars/01.png')}}" alt="User-Profile"
                             class="img-fluid avatar avatar-50 avatar-rounded">
                         <div class="caption ms-3 ">
-                            <h6 class="mb-0 caption-title">{{ auth()->user()->name }}</h6>
-                            {{-- <p class="mb-0 caption-sub-title">Super Admin</p> --}}
+                            <h6 class="mb-0 caption-title">Account ID</h6>
+                            <p class="mb-0 caption-sub-title text-uppercase">234532tnkjjk3214</p>
+                            <p class="mb-0 caption-sub-title text-success text-uppercase">Account Verified</p>
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li class="border-0"><a class="dropdown-item"
-                                href="../dashboard/app/user-profile.html">Profile</a></li>
+                                href="{{ route('user.profile.edit') }}">Profile</a></li>
                         <li class="border-0">
                             <hr class="m-0 dropdown-divider">
                         </li>
