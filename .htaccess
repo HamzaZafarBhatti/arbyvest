@@ -5,7 +5,7 @@
 
     RewriteEngine On
     ErrorDocument 403 http://localhost/arbyvest/app/dashboard
-    ErrorDocument 403 http://arbyvest.com/app/dashboard
+    ErrorDocument 403 https://arbyvest.com/app/dashboard
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
