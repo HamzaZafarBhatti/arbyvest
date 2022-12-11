@@ -73,6 +73,6 @@ class UserController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/user');
+        return redirect('/app/login');
     }
 }
