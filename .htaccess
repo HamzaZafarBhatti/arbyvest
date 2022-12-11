@@ -4,7 +4,6 @@
     </IfModule>
 
     RewriteEngine On
-    ErrorDocument 403 http://localhost/arbyvest/app/dashboard
     ErrorDocument 403 https://arbyvest.com/app/dashboard
 
     # Handle Authorization Header
