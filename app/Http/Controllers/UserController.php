@@ -65,6 +65,11 @@ class UserController extends Controller
         return view('user.dashboard');
     }
 
+    public function market_rates()
+    {
+        return view('user.market_rates');
+    }
+
     public function logout(Request $request)
     {
         Auth::guard('web')->logout();
