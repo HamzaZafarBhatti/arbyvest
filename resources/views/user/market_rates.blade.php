@@ -1,6 +1,6 @@
 @extends('user.layout.app')
 
-@section('title', 'Dashboard')
+@section('title', 'Market Rates')
 
 @section('css')
     <style>
@@ -42,16 +42,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>🇺🇸 United States Dollar</td>
-                        <td>₦ 553</td>
-                        <td>₦ 719</td>
-                    </tr>
-                    <tr>
-                        <td>🇬🇧 Great Britain Pounds</td>
-                        <td>₦ 675</td>
-                        <td>₦ 878</td>
-                    </tr>
+                    @if (!$market_prices->isEmpty())
+                        @foreach ($market_prices as $item)
+                            <tr>
+                                <td>{{ $item->currency }}</td>
+                                <td>{{ $item->get_local_rate }}</td>
+                                <td>{{ $item->get_black_market_rate }}</td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="3">No Market Price found!</td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
             <div class="d-flex justify-content-between">

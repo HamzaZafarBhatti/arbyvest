@@ -64,21 +64,21 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.banks.index') }}" class="nav-link">
+                    <a href="{{ route('admin.banks.index') }}" class="nav-link @if(Route::is('admin.banks.*')) active @endif">
                         <i class="icon-home"></i>
                         <span>
                             Banks
                         </span>
                     </a>
                 </li>
-                {{-- <li class="nav-item">
-                    <a href="{{ route('admin.account_types.index') }}" class="nav-link">
+                <li class="nav-item">
+                    <a href="{{ route('admin.market_prices.index') }}" class="nav-link @if(Route::is('admin.market_prices.*')) active @endif">
                         <i class="icon-home"></i>
                         <span>
-                            Account Types
+                            Market Prices
                         </span>
                     </a>
-                </li> --}}
+                </li>
                 {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-user-plus"></i> <span>User
                             Manangement</span></a>

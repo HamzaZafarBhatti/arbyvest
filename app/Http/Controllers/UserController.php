@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\MarketPrice;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -67,7 +68,8 @@ class UserController extends Controller
 
     public function market_rates()
     {
-        return view('user.market_rates');
+        $market_prices = MarketPrice::whereIsActive(1)->get();
+        return view('user.market_rates', compact('market_prices'));
     }
 
     public function logout(Request $request)

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\MarketPriceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
@@ -32,6 +33,7 @@ Route::name('front.')->controller(FrontController::class)->group(function () {
     Route::get('/contact', 'contact')->name('contact');
     Route::get('/terms', 'terms')->name('terms');
     Route::get('/support', 'support')->name('support');
+    Route::get('/market_rates', 'market_rates')->name('market_rates');
 });
 Route::middleware('guest')->group(function () {
     // Admin
@@ -76,6 +78,7 @@ Route::middleware('auth')->group(function () {
             Route::post('update_logo_favicon', 'update_logo_favicon')->name('update_logo_favicon');
         });
         Route::resource('banks', BankController::class)->except('create', 'show');
+        Route::resource('market_prices', MarketPriceController::class)->except('create', 'show');
     });
     // User
     Route::middleware('user')->prefix('app')->name('user.')->group(function () {

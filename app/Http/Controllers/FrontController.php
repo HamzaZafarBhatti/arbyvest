@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MarketPrice;
 use Illuminate\Http\Request;
 
 class FrontController extends Controller
@@ -46,5 +47,12 @@ class FrontController extends Controller
     public function support()
     {
         return view('front.support');
+    }
+
+    public function market_rates()
+    {
+        $market_prices = MarketPrice::whereIsActive(1)->get();
+        // return $market_prices;
+        return view('front.market_rates', compact('market_prices'));
     }
 }

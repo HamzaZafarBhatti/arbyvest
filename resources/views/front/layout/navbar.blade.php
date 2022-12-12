@@ -21,6 +21,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{{route('front.index')}}" class="nav-item nav-link @if(Route::is('front.index')) active @endif">Home</a>
+                <a href="{{route('front.market_rates')}}" class="nav-item nav-link @if(Route::is('front.market_rates')) active @endif">Market Rates</a>
                 <a href="{{route('front.about')}}" class="nav-item nav-link @if(Route::is('front.about')) active @endif">About</a>
                 <a href="{{route('front.services')}}" class="nav-item nav-link @if(Route::is('front.services')) active @endif">Services</a>
                 <div class="nav-item dropdown">
