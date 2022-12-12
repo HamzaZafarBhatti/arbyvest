@@ -86,6 +86,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/logout', 'logout')->name('logout');
             Route::get('dashboard', 'dashboard')->name('dashboard');
             Route::get('market_rates', 'market_rates')->name('market_rates');
+            Route::get('fund_wallet', 'fund_wallet')->name('fund_wallet');
             Route::get('profile', 'profile_edit')->name('profile.edit');
             Route::patch('profile', 'profile_update')->name('profile.update');
         });

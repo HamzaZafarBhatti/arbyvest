@@ -72,6 +72,12 @@ class UserController extends Controller
         return view('user.market_rates', compact('market_prices'));
     }
 
+    public function fund_wallet()
+    {
+        // $market_prices = MarketPrice::whereIsActive(1)->get();
+        return view('user.fund_wallet'/* , compact('market_prices') */);
+    }
+
     public function logout(Request $request)
     {
         Auth::guard('web')->logout();

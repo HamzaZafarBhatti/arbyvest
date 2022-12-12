@@ -52,7 +52,6 @@ class FrontController extends Controller
     public function market_rates()
     {
         $market_prices = MarketPrice::whereIsActive(1)->get();
-        // return $market_prices;
         return view('front.market_rates', compact('market_prices'));
     }
 }
