@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\MarketPriceController;
@@ -78,9 +79,13 @@ Route::middleware('auth')->group(function () {
             Route::post('settings', 'settings_update')->name('update');
             Route::post('update_logo_favicon', 'update_logo_favicon')->name('update_logo_favicon');
         });
+        Route::controller(AdminUserController::class)->name('users.')->group(function() {
+            Route::get('make-vendor/{id}', 'makeVendor')->name('make-vendor');
+        });
         Route::resource('banks', BankController::class)->except('create', 'show');
         Route::resource('market_prices', MarketPriceController::class)->except('create', 'show');
         Route::resource('roles', RoleController::class)->except('create', 'show', 'delete');
+        Route::resource('users', AdminUserController::class)->except('create', 'show', 'delete');
     });
     // User
     Route::middleware('user')->prefix('app')->name('user.')->group(function () {

@@ -17,6 +17,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'userVendorRoleIds' => env('USER_VENDOR_ROLE_IDS'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

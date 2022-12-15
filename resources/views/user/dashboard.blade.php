@@ -22,18 +22,22 @@
                     <div class="card mb-xl-0">
                         <div class="card-body ">
                             <div class="d-flex flex-column align-items-center flex-md-row gap-3">
-                                <img src="{{ asset('asset/user/images/avatars/01.png') }}"
+                                <img src="{{asset(auth()->user()->image ? 'asset/user/images/'.auth()->user()->image : 'asset/user/images/avatars/01.png')}}"
                                     class="img-fluid avatar avatar-90 avatar-rounded" alt="img8">
                                 <div class="d-flex flex-column justify-content-evenly text-center text-md-start">
                                     <span class="h5">
-                                        Welcome, Mohammad Abdul!
+                                        Welcome, {{ auth()->user()->name }}!
                                     </span>
                                     <span class="text-primary">
-                                        Account ID: <span class="text-uppercase">234532tnkjjk3214</span>
+                                        Account ID: <span class="text-uppercase">{{ auth()->user()->account_id }}</span>
                                     </span>
                                     <span class="text-white">
-                                        Account Verification Status: <span
-                                            class="text-uppercase text-success">verified</span>
+                                        Account Verification Status: 
+                                        @if (auth()->user()->is_verified)
+                                            <span class="text-uppercase text-success">verified</span>
+                                        @else
+                                            <span class="text-uppercase text-danger">unverified</span>
+                                        @endif
                                     </span>
                                 </div>
                             </div>
@@ -118,55 +122,58 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="card text-center text-md-start">
-                                <div class="card-header">
-                                    <div class="header-title ">
-                                        <h4 class="card-title text-danger">Please Complete your Account Verification</h4>
-                                    </div>
-                                </div>
-                                <div class="card-body">
+                        @if (auth()->user()->is_verified)
+                            <div class="col-lg-12">
+                                <div class="card text-center text-md-start">
                                     <div class="row">
                                         <div class="col-md-9 col-12">
-                                            <h6>
-                                                You won't be able to trade on the Black Market or Withdraw without
-                                                completing your KYC verification.
-                                            </h6>
+                                            <div class="card-header">
+                                                <div class="header-title ">
+                                                    <h4 class="card-title text-success">Your Account is FULLY VERIFIED</h4>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <h6>
+                                                    You can trade on the Black Market and Withdraw without Limits on this
+                                                    account.
+                                                </h6>
+                                            </div>
                                         </div>
-                                        <div class="col-md-3 col-12">
-                                            <div class="pt-2">
-                                                <a href="#" class="btn btn-primary w-100" type="button">
-                                                    Complete Verification
-                                                </a>
+                                        <div class="col-md-3 col-12 text-center">
+                                            <img src="{{ asset('asset/user/images/utilities/05.png') }}"
+                                                class="img-fluid avatar avatar-120" alt="img60">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            <div class="col-lg-12">
+                                <div class="card text-center text-md-start">
+                                    <div class="card-header">
+                                        <div class="header-title ">
+                                            <h4 class="card-title text-danger">Please Complete your Account Verification</h4>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-9 col-12">
+                                                <h6>
+                                                    You won't be able to trade on the Black Market or Withdraw without
+                                                    completing your KYC verification.
+                                                </h6>
+                                            </div>
+                                            <div class="col-md-3 col-12">
+                                                <div class="pt-2">
+                                                    <a href="#" class="btn btn-primary w-100" type="button">
+                                                        Complete Verification
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="card text-center text-md-start">
-                                <div class="row">
-                                    <div class="col-md-9 col-12">
-                                        <div class="card-header">
-                                            <div class="header-title ">
-                                                <h4 class="card-title text-success">Your Account is FULLY VERIFIED</h4>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            <h6>
-                                                You can trade on the Black Market and Withdraw without Limits on this
-                                                account.
-                                            </h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-12 text-center">
-                                        <img src="{{ asset('asset/user/images/utilities/05.png') }}"
-                                            class="img-fluid avatar avatar-120" alt="img60">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endif
                         <div class="col-lg-12">
                             <div class="card text-center text-md-start">
                                 <div class="card-header">

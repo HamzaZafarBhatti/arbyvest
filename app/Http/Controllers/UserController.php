@@ -44,11 +44,15 @@ class UserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $bytes = random_bytes(5);
+        $account_id = bin2hex($bytes);
+
         $user = User::create([
             'name' => $request->name,
             'username' => $request->username,
             'email' => $request->email,
             'phone' => $request->phone,
+            'account_id' => $account_id,
             'password' => bcrypt($request->password),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),

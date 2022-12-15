@@ -25,6 +25,12 @@ class User extends Authenticatable
         'parent_id',
         'email',
         'password',
+        'account_id',
+        'usd_wallet',
+        'gbp_wallet',
+        'ngn_wallet',
+        'image',
+        'is_verified',
     ];
 
     /**

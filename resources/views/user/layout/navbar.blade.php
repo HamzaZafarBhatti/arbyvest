@@ -177,12 +177,16 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link py-0 d-flex align-items-center" href="#" id="navbarDropdown"
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{asset('asset/user/images/avatars/01.png')}}" alt="User-Profile"
+                        <img src="{{asset(auth()->user()->image ? 'asset/user/images/'.auth()->user()->image : 'asset/user/images/avatars/01.png')}}" alt="User-Profile"
                             class="img-fluid avatar avatar-50 avatar-rounded">
                         <div class="caption ms-3 ">
                             <h6 class="mb-0 caption-title">Account ID</h6>
-                            <p class="mb-0 caption-sub-title text-uppercase">234532tnkjjk3214</p>
-                            <p class="mb-0 caption-sub-title text-success text-uppercase">Account Verified</p>
+                            <p class="mb-0 caption-sub-title text-uppercase">{{ auth()->user()->account_id }}</p>
+                            @if (auth()->user()->is_verified)
+                                <p class="mb-0 caption-sub-title text-success text-uppercase">Account Verified</p>
+                            @else
+                                <p class="mb-0 caption-sub-title text-danger text-uppercase">Account Unverified</p>
+                            @endif
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

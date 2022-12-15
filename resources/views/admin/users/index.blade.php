@@ -1,4 +1,6 @@
-@extends('admin.master')
+@extends('admin.layout.master')
+
+@section('title', 'Users')
 
 @section('content')
     <div class="content">
@@ -16,35 +18,25 @@
                                     <th>Name</th>
                                     <th>Username</th>
                                     <th>Email</th>
-                                    <th>Upline</th>
-                                    <th>Coupon</th>
-                                    <th>Plan</th>
+                                    {{-- <th>Upline</th> --}}
                                     <th>Status</th>
                                     <th>Created</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($users as $k => $val)
+                                @foreach ($records as $k => $val)
                                     <tr>
                                         <td>{{ ++$k }}.</td>
                                         <td>{{ $val->name }}</td>
                                         <td>{{ $val->username }}</td>
                                         <td>{{ $val->email }}</td>
-                                        <td>{{ count($val->parent) ? $val->parent[0]->username : 'N/A' }}</td>
+                                        {{-- <td>{{ count($val->parent) ? $val->parent[0]->username : 'N/A' }}</td> --}}
                                         <td>
-                                            @if ($val->coupon)
-                                                <span class="badge badge-info">{{$val->coupon->serial}}</span>
+                                            @if ($val->is_verified)
+                                                <span class="badge badge-info">Verified</span>
                                             @else
-                                                <span class="badge badge-success">Paid with Paystack</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ $val->plan ? $val->plan->name : 'N/A' }}</td>
-                                        <td>
-                                            @if (!$val->is_blocked)
-                                                <span class="badge badge-info">Active</span>
-                                            @else
-                                                <span class="badge badge-danger">Blocked</span>
+                                                <span class="badge badge-danger">Unverified</span>
                                             @endif
                                         </td>
                                         <td>{{ date('Y/m/d', strtotime($val->created_at)) }}</td>
@@ -55,10 +47,14 @@
                                                         <i class="icon-menu9"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class='dropdown-item'
-                                                            href="{{ route('admin.users.manage', $val->id) }}"><i
+                                                        <a class='dropdown-item' href="{{-- {{ route('admin.users.manage', $val->id) }} --}}"><i
                                                                 class="icon-cogs spinner mr-2"></i>Manage account</a>
-                                                        @if (!$val->is_blocked)
+                                                        @if (!$val->hasRole('Vendor'))
+                                                            <a class='dropdown-item'
+                                                                href="{{ route('admin.users.make-vendor', $val->id) }}"><i
+                                                                    class="icon-pencil mr-2"></i>Update to Vendor</a>
+                                                        @endif
+                                                        {{-- @if (!$val->is_blocked)
                                                             <a class='dropdown-item'
                                                                 href="{{ route('admin.users.block', $val->id) }}"><i
                                                                     class="icon-eye-blocked2 mr-2"></i>Block</a>
@@ -66,10 +62,7 @@
                                                             <a class='dropdown-item'
                                                                 href="{{ route('admin.users.unblock', $val->id) }}"><i
                                                                     class="icon-eye mr-2"></i>Unblock</a>
-                                                        @endif
-                                                        {{-- <a class='dropdown-item'
-                                                            href="{{ route('admin.users.email', [$val->email, $val->name]) }}"><i
-                                                                class="icon-envelope mr-2"></i>Send email</a> --}}
+                                                        @endif --}}
                                                         <a data-toggle="modal" data-target="#{{ $val->id }}delete"
                                                             class="dropdown-item"><i class="icon-bin2 mr-2"></i>Delete
                                                             account</a>
@@ -92,8 +85,7 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-link"
                                                         data-dismiss="modal">Close</button>
-                                                    <a href="{{ route('admin.users.delete', $val->id) }}"
-                                                        class="btn bg-danger">Proceed</a>
+                                                    <a href="{{-- {{ route('admin.users.delete', $val->id) }} --}}" class="btn bg-danger">Proceed</a>
                                                 </div>
                                             </div>
                                         </div>
