@@ -5,6 +5,7 @@ use App\Http\Controllers\BankController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\MarketPriceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -79,6 +80,7 @@ Route::middleware('auth')->group(function () {
         });
         Route::resource('banks', BankController::class)->except('create', 'show');
         Route::resource('market_prices', MarketPriceController::class)->except('create', 'show');
+        Route::resource('roles', RoleController::class)->except('create', 'show', 'delete');
     });
     // User
     Route::middleware('user')->prefix('app')->name('user.')->group(function () {

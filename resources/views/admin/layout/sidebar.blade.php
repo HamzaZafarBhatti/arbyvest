@@ -79,15 +79,22 @@
                         </span>
                     </a>
                 </li>
-                {{-- <li class="nav-item nav-item-submenu">
+                <li class="nav-item nav-item-submenu @if(Route::is(['admin.roles.*'/* ,'admin.users.*' */])) nav-item-open @endif">
                     <a href="#" class="nav-link"><i class="icon-user-plus"></i> <span>User
                             Manangement</span></a>
-
-                    <ul class="nav nav-group-sub" data-submenu-title="User Manangement">
-                        <li class="nav-item"><a href="{{ route('admin.users') }}" class="nav-link"><i
-                                    class="icon-user"></i> Client accounts</a></li>
+                    <ul class="nav nav-group-sub" data-submenu-title="User Manangement" @if(Route::is('admin.roles.*')) style="display: block" @endif>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.roles.index') }}" class="nav-link @if(Route::is('admin.roles.index')) active @endif">
+                                <i class="icon-user"></i>Roles
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="icon-user"></i>Client accounts
+                            </a>
+                        </li>
                     </ul>
-                </li> --}}
+                </li>
                 <li class="nav-item nav-item-submenu @if(Route::is('admin.settings.*')) nav-item-open @endif">
                     <a href="#" class="nav-link"><i class="icon-cogs spinner"></i> <span>System
                             configuration</span></a>
