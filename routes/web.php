@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'dashboard')->name('dashboard');
             Route::get('account', 'account')->name('account');
             Route::post('account', 'account_update')->name('account.update');
+            Route::get('user_transfer_balance_logs', 'user_transfer_balance_logs')->name('user_transfer_balance_logs');
         });
         Route::controller(SettingController::class)->name('settings.')->group(function () {
             Route::get('settings', 'settings')->name('index');
@@ -94,6 +95,10 @@ Route::middleware('auth')->group(function () {
             Route::get('dashboard', 'dashboard')->name('dashboard');
             Route::get('market_rates', 'market_rates')->name('market_rates');
             Route::get('fund_wallet', 'fund_wallet')->name('fund_wallet');
+            Route::get('verify_trader', 'verify_trader')->name('trader.verify');
+            Route::post('verify_trader', 'do_verify_trader')->name('trader.do_verify');
+            Route::get('transfer_balance', 'transfer_balance')->name('transfer_balance');
+            Route::post('transfer_balance', 'do_transfer_balance')->name('do_transfer_balance');
             Route::get('profile', 'profile_edit')->name('profile.edit');
             Route::patch('profile', 'profile_update')->name('profile.update');
         });

@@ -113,6 +113,14 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.user_transfer_balance_logs') }}" class="nav-link @if(Route::is('admin.user_transfer_balance_logs')) active @endif">
+                        <i class="icon-home"></i>
+                        <span>
+                            User Transfer Logs
+                        </span>
+                    </a>
+                </li>
                 {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-pulse2"></i>
                         <span>MLM Plans</span></a>

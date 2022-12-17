@@ -27,6 +27,7 @@
             @include('user.layout.navbar')
         </div>
         <div class="container-fluid content-inner pb-0">
+            @include('user.alert')
             @yield('content')
         </div>
         @include('user.layout.footer')

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,6 +19,10 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    const USD_SYMBOL = '$';
+    const GBP_SYMBOL = '£';
+    const NGN_SYMBOL = '₦';
+
     protected $fillable = [
         'name',
         'username',
@@ -51,4 +56,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected function getUsdWallet(): Attribute
+    {
+        return Attribute::make(
+            get: fn($val, $attr) => '$ '.$attr['usd_wallet']
+        );
+    }
+    protected function getGbpWallet(): Attribute
+    {
+        return Attribute::make(
+            get: fn($val, $attr) => '£ '.$attr['gbp_wallet']
+        );
+    }
+    protected function getNgnWallet(): Attribute
+    {
+        return Attribute::make(
+            get: fn($val, $attr) => '₦ '.$attr['ngn_wallet']
+        );
+    }
 }

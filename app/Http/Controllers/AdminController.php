@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Setting;
+use App\Models\TransferBalanceLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,4 +38,9 @@ class AdminController extends Controller
         return redirect()->route('admin.login')->with('success', 'Just Logged Out!');
     }
     
+    public function user_transfer_balance_logs()
+    {
+        $logs = TransferBalanceLog::with('vendor', 'user')->latest('id')->get();
+        return view('admin.transfer.transfer_balance', compact('logs'));
+    }
 }
