@@ -39,14 +39,6 @@ class AdminUserController extends Controller
     public function store(Request $request)
     {
         //
-        try {
-            $data = $request->except('_token');
-            User::create($data);
-            return back()->with('success', 'User added!');
-        } catch (\Throwable $th) {
-            Log::error('Error! '.$th->getMessage());
-            return back()->with('error', 'Something went wrong!');
-        }
     }
 
     /**
@@ -116,6 +108,20 @@ class AdminUserController extends Controller
             $user = User::find($id);
             $user->assignRole('Vendor');
             return back()->with('success', 'User has become vendor!');
+        } catch(Throwable $th) {
+            Log::error('Error: '.$th->getMessage());
+            return back()->with('error', 'Something went wrong!');
+        }
+    }
+
+    public function do_verify_account(Request $request)
+    {
+        try {
+            $user = User::find($request->user_id);
+            $user->update([
+                'is_verified' => 1
+            ]);
+            return back()->with('success', 'User has been verified!');
         } catch(Throwable $th) {
             Log::error('Error: '.$th->getMessage());
             return back()->with('error', 'Something went wrong!');

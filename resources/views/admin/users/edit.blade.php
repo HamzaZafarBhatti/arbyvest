@@ -1,4 +1,6 @@
-@extends('admin.master')
+@extends('admin.layout.master')
+
+@section('title', 'User Account')
 
 @section('content')
     <div class="content">
@@ -7,147 +9,64 @@
                 <div class="card">
                     <div class="card-header header-elements-inline">
                         <h6 class="card-title font-weight-semibold">
-                            Update account information : {{ $client->account_type->name }}
+                            Update account information
                         </h6>
-                        @if (in_array($client->account_type_id, $mlm_arr))
-                        <h6>
-                            Cycle: {{ $client->cycle }}
-                        </h6>
-                        @endif
-                        @if (in_array($client->account_type_id, $aff_arr) && $client->account_type_id == 1)
-                        <div>
-                            <a class="btn btn-primary" type="button" href="{{ route('admin.users.upgrade_account', $client->id) }}">Upgrade Account</a>
-                        </div>
-                        @endif
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('admin.users.profile-update') }}" method="post">
+                        <form action="{{ route('admin.users.update', $user->id) }}" method="post">
                             @csrf
+                            @method('patch')
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Username:</label>
                                 <div class="col-lg-10">
-                                    <input type="" hidden value="{{ $client->id }}" name="id">
+                                    <input type="" hidden value="{{ $user->id }}" name="id">
                                     <input type="text" name="username" class="form-control"
-                                        value="{{ $client->username }}">
+                                        value="{{ $user->username }}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Name:</label>
                                 <div class="col-lg-10">
-                                    <input type="text" name="name" class="form-control" value="{{ $client->name }}">
+                                    <input type="text" name="name" class="form-control" value="{{ $user->name }}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Email:</label>
                                 <div class="col-lg-10">
-                                    <input type="email" name="email" class="form-control" value="{{ $client->email }}">
+                                    <input type="email" name="email" class="form-control" value="{{ $user->email }}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Mobile:</label>
                                 <div class="col-lg-10">
-                                    <input type="text" name="mobile" class="form-control" value="{{ $client->phone }}">
+                                    <input type="text" name="mobile" class="form-control" value="{{ $user->phone }}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Country:</label>
                                 <div class="col-lg-10">
                                     <input type="text" name="country" class="form-control"
-                                        value="{{ $client->country }}">
+                                        value="{{ $user->country }}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">City:</label>
                                 <div class="col-lg-10">
-                                    <input type="text" name="city" class="form-control" value="{{ $client->city }}">
+                                    <input type="text" name="city" class="form-control" value="{{ $user->city }}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Zip code:</label>
                                 <div class="col-lg-10">
                                     <input type="text" name="zip_code" class="form-control"
-                                        value="{{ $client->zip_code }}">
+                                        value="{{ $user->zip_code }}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Address:</label>
                                 <div class="col-lg-10">
                                     <input type="text" name="address" class="form-control"
-                                        value="{{ $client->address }}">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                @php
-                                    if(in_array($client->account_type_id, $aff_arr)) {
-                                        $name = 'Video Earning';
-                                    } else if (in_array($client->account_type_id, $mlm_arr)) {
-                                        $name = 'Account';
-                                    }
-                                @endphp
-                                <label class="col-form-label col-lg-2">{{ $name }} Balance:</label>
-                                <div class="col-lg-10">
-                                    <div class="input-group">
-                                        <span class="input-group-prepend">
-                                            <span class="input-group-text">NGN</span>
-                                        </span>
-                                        <input type="number" name="balance" step="any" max-length="10"
-                                            value="{{ convertFloat($client->balance) }}" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            @if (in_array($client->account_type_id, $aff_arr)) 
-                            <div class="form-group row">
-                                <label class="col-form-label col-lg-2">REFERRAL EARNING Balance:</label>
-                                <div class="col-lg-10">
-                                    <div class="input-group">
-                                        <span class="input-group-prepend">
-                                            <span class="input-group-text">NGN</span>
-                                        </span>
-                                        <input type="number" name="affliate_ref_balance" step="any" max-length="10"
-                                            value="{{ convertFloat($client->affliate_ref_balance) }}" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
-                            <div class="form-group row">
-                                <label class="col-form-label col-lg-2">Status<span class="text-danger">*</span></label>
-                                <div class="col-lg-10">
-                                    <div class="form-check form-check-inline form-check-switchery">
-                                        <label class="form-check-label">
-                                            @if ($client->email_verify == 1)
-                                                <input type="checkbox" name="email_verify"
-                                                    class="form-check-input-switchery" value="1" checked>
-                                            @else
-                                                <input type="checkbox" name="email_verify"
-                                                    class="form-check-input-switchery" value="1">
-                                            @endif
-                                            Email verification
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline form-check-switchery">
-                                        <label class="form-check-label">
-                                            @if ($client->phone_verify == 1)
-                                                <input type="checkbox" name="phone_verify"
-                                                    class="form-check-input-switchery" value="1" checked>
-                                            @else
-                                                <input type="checkbox" name="phone_verify"
-                                                    class="form-check-input-switchery" value="1">
-                                            @endif
-                                            Phone verification
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline form-check-switchery">
-                                        <label class="form-check-label">
-                                            @if ($client->upgrade == 1)
-                                                <input type="checkbox" name="upgrade" class="form-check-input-switchery"
-                                                    value="1" checked>
-                                            @else
-                                                <input type="checkbox" name="upgrade" class="form-check-input-switchery"
-                                                    value="1">
-                                            @endif
-                                            Upgrade account
-                                        </label>
-                                    </div>
+                                        value="{{ $user->address }}">
                                 </div>
                             </div>
                             <div class="text-right">
@@ -157,7 +76,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="card">
+                {{-- <div class="card">
                     <div class="card-header header-elements-inline">
                         <h6 class="card-title font-weight-semibold">Update Bank details</h6>
                     </div>
@@ -172,26 +91,26 @@
                                         @if ($banks)
                                             @foreach ($banks as $bank)
                                                 <option value="{{ $bank->id }}"
-                                                    {{ $client->bank_id == $bank->id ? 'selected' : '' }}>
+                                                    {{ $user->bank_id == $bank->id ? 'selected' : '' }}>
                                                     {{ $bank['name'] }}</option>
                                             @endforeach
                                         @endif
                                     </select>
-                                    <input type="" hidden value="{{ $client->id }}" name="id">
+                                    <input type="" hidden value="{{ $user->id }}" name="id">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Account Name:</label>
                                 <div class="col-lg-10">
                                     <input type="text" name="account_name" class="form-control" id="account_name"
-                                        value="{{ $client->bank_account_name }}">
+                                        value="{{ $user->bank_account_name }}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Account Number:</label>
                                 <div class="col-lg-10">
                                     <input type="text" name="account_no" class="form-control" id="account_no"
-                                        value="{{ $client->bank_account_no }}">
+                                        value="{{ $user->bank_account_no }}">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -200,9 +119,9 @@
                                     <select name="account_type" id="account_type" class="form-control">
                                         <option value="">Select Account Type</option>
                                         <option value="savings"
-                                            {{ $client->bank_account_type == 'savings' ? 'selected' : '' }}>Savings</option>
+                                            {{ $user->bank_account_type == 'savings' ? 'selected' : '' }}>Savings</option>
                                         <option value="current"
-                                            {{ $client->bank_account_type == 'current' ? 'selected' : '' }}>Current</option>
+                                            {{ $user->bank_account_type == 'current' ? 'selected' : '' }}>Current</option>
                                     </select>
                                 </div>
                             </div>
@@ -212,14 +131,14 @@
                             </div>
                         </form>
                     </div>
-                </div>
+                </div> --}}
             </div>
             <div class="col-md-4">
-                <div class="card">
+                {{-- <div class="card">
                     <div class="card-body text-center">
                         <div class="card-img-actions d-inline-block mb-3">
                             <img class="img-fluid rounded-circle"
-                                src="{{ url('/') }}/asset/profile/{{ $client->image }}" width="120" height="120"
+                                src="{{ url('/') }}/asset/images/{{ $user->photo }}" width="120" height="120"
                                 alt="">
                         </div>
                     </div>
@@ -230,22 +149,64 @@
                             <div>
                                 <ul class="list list-unstyled mb-0">
                                     <li>Joined: <span
-                                            class="font-weight-semibold">{{ date('Y/m/d h:i:A', strtotime($client->created_at)) }}</span>
+                                            class="font-weight-semibold">{{ date('Y/m/d h:i:A', strtotime($user->created_at)) }}</span>
                                     </li>
                                     <li>Last Login: <span
-                                            class="font-weight-semibold">{{ date('Y/m/d h:i:A', strtotime($client->last_login)) }}</span>
+                                            class="font-weight-semibold">{{ date('Y/m/d h:i:A', strtotime($user->last_login)) }}</span>
                                     </li>
                                     <li>Last Updated: <span
-                                            class="font-weight-semibold">{{ date('Y/m/d h:i:A', strtotime($client->updated_at)) }}</span>
+                                            class="font-weight-semibold">{{ date('Y/m/d h:i:A', strtotime($user->updated_at)) }}</span>
                                     </li>
-                                    <li>IP Address: <span class="font-weight-semibold">{{ $client->ip_address }}</span>
+                                    <li>IP Address: <span class="font-weight-semibold">{{ $user->ip_address }}</span>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <div class="card">
+                    <div class="card-header header-elements-inline">
+                        <h6 class="card-title font-weight-semibold">Update user pin</h6>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <ul class="list list-unstyled mb-0">
+                                <li>Joined: <span
+                                        class="font-weight-semibold">{{ date('Y/m/d h:i:A', strtotime($user->created_at)) }}</span>
+                                </li>
+                                {{-- <li>Last Login: <span
+                                        class="font-weight-semibold">{{ date('Y/m/d h:i:A', strtotime($user->last_login)) }}</span>
+                                </li> --}}
+                                <li>Last Updated: <span
+                                        class="font-weight-semibold">{{ date('Y/m/d h:i:A', strtotime($user->updated_at)) }}</span>
+                                </li>
+                                {{-- <li>IP Address: <span class="font-weight-semibold">{{ $user->ip_address }}</span>
+                                </li> --}}
+                                <li>Document Type: <span
+                                    class="font-weight-semibold">{{ $user->document_type ? $user->document_type->name : 'Not Selected' }}</span>
+                                </li>
+                                <li>Document Picture:
+                                    <span>
+                                        <img src="{{ url('/').'/'.$user->getPhotoPath().$user->document_pic }}" alt="" width="100%">
+                                    </span>
+                                </li>
+                                <li>Selfie:
+                                    <span>
+                                        <img src="{{ url('/').'/'.$user->getPhotoPath().$user->selfie }}" alt="" width="100%">
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <form action="{{ route('admin.users.verify_account') }}" method="post">
+                            @csrf
+                            <input type="hidden" value="{{ $user->id }}" name="user_id">
+                            <div class="text-right mt-3">
+                                <button type="submit" class="btn bg-dark">Verify User</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {{-- <div class="card">
                     <div class="card-header header-elements-inline">
                         <h6 class="card-title font-weight-semibold">Update user pin</h6>
                     </div>
@@ -255,7 +216,7 @@
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Pin:</label>
                                 <div class="col-lg-10">
-                                    <input type="" hidden value="{{ $client->id }}" name="id">
+                                    <input type="" hidden value="{{ $user->id }}" name="id">
                                     <input type="text" name="pin" class="form-control">
                                 </div>
                             </div>
@@ -265,10 +226,10 @@
                             </div>
                         </form>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header header-elements-inline">
@@ -473,6 +434,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 @stop

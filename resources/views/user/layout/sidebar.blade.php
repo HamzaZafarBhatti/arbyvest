@@ -241,7 +241,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="../dashboard/maps/google.html">
+                    <a class="nav-link @if (Route::is('user.verify_account')) active @endif" href="{{ route('user.verify_account') }}">
                         <i class="icon">
                             <svg width="22" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -259,7 +259,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="../dashboard/maps/google.html">
+                    <a class="nav-link @if (Route::is('user.change_pin')) active @endif" href="{{ route('user.change_pin') }}">
                         <i class="icon">
                             <svg width="22" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">

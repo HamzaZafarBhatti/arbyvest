@@ -22,6 +22,8 @@ class User extends Authenticatable
     const USD_SYMBOL = '$';
     const GBP_SYMBOL = '£';
     const NGN_SYMBOL = '₦';
+    
+    protected $photo_path = 'asset/images/';
 
     protected $fillable = [
         'name',
@@ -36,6 +38,13 @@ class User extends Authenticatable
         'ngn_wallet',
         'image',
         'is_verified',
+        'photo',
+        'birthdate',
+        'document_type_id',
+        'document_pic',
+        'selfie',
+        'pin',
+        'whatsapp_number',
     ];
 
     /**
@@ -74,5 +83,15 @@ class User extends Authenticatable
         return Attribute::make(
             get: fn($val, $attr) => '₦ '.$attr['ngn_wallet']
         );
+    }
+
+    public function getPhotoPath()
+    {
+        return $this->photo_path;
+    }
+
+    public function document_type()
+    {
+        return $this->belongsTo(DocumentType::class);
     }
 }

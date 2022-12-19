@@ -142,9 +142,9 @@ class UserController extends Controller
         return redirect()->route('user.transfer_balance')->with('success', 'Amount Transfered to Account ID: ' . $request->account_id);
     }
 
-    public function verify_trader($verification_result = null, $is_verified = null, $vendor = null)
+    public function verify_trader()
     {
-        return view('user.verify_trader', compact('verification_result', 'is_verified', 'vendor'));
+        return view('user.verify_trader');
     }
 
     public function do_verify_trader(Request $request)
@@ -157,6 +157,29 @@ class UserController extends Controller
             $is_verified = false;
         }
         return view('user.verify_trader', compact('verification_result', 'is_verified', 'trader'));
+    }
+
+    public function change_pin()
+    {
+        return view('user.change_pin');
+    }
+
+    public function do_change_pin(Request $request)
+    {
+        $request->validate([
+            'old_pin' => ['required', 'string'],
+            'new_pin' => ['required', 'confirmed'],
+        ]);
+        try {
+            $user = $request->user();
+            $user->update([
+                'pin' => $request->new_pin
+            ]);
+            return back()->with('success', 'Pin changed');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return back()->with('error', 'Something went wrong!');
+        }
     }
 
     public function logout(Request $request)

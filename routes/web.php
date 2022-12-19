@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\MarketPriceController;
 use App\Http\Controllers\ProfileController;
@@ -87,6 +88,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('market_prices', MarketPriceController::class)->except('create', 'show');
         Route::resource('roles', RoleController::class)->except('create', 'show', 'delete');
         Route::resource('users', AdminUserController::class)->except('create', 'show', 'delete');
+        Route::post('verify_account', [AdminUserController::class, 'do_verify_account'])->name('users.verify_account');
+        Route::resource('document_types', DocumentTypeController::class)->except('create', 'show');
     });
     // User
     Route::middleware('user')->prefix('app')->name('user.')->group(function () {
@@ -99,8 +102,14 @@ Route::middleware('auth')->group(function () {
             Route::post('verify_trader', 'do_verify_trader')->name('trader.do_verify');
             Route::get('transfer_balance', 'transfer_balance')->name('transfer_balance');
             Route::post('transfer_balance', 'do_transfer_balance')->name('do_transfer_balance');
-            Route::get('profile', 'profile_edit')->name('profile.edit');
-            Route::patch('profile', 'profile_update')->name('profile.update');
+            Route::get('change_pin', 'change_pin')->name('change_pin');
+            Route::post('change_pin', 'do_change_pin')->name('do_change_pin');
+        });
+        Route::controller(ProfileController::class)->group(function () {
+            Route::get('profile', 'edit')->name('profile.edit');
+            Route::patch('profile', 'update')->name('profile.update');
+            Route::get('verify_account', 'verify_account')->name('verify_account');
+            Route::post('verify_account', 'do_verify_account')->name('do_verify_account');
         });
     });
 });

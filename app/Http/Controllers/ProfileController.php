@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\DocumentType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
+use Image;
 
 class ProfileController extends Controller
 {
@@ -63,5 +66,44 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function verify_account()
+    {
+        $documentTypes = DocumentType::whereIsActive(1)->get();
+        return view('user.profile.verify_account', compact('documentTypes'));
+    }
+
+    public function do_verify_account(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $data = $request->only('birthdate', 'document_type_id');
+            $ext = $request->document_pic->getClientOriginalExtension();
+            // return $ext;
+            if ($image = $request->file('document_pic')) {
+                $filename = 'document_pic_' . time() . '.' . $ext;
+                $location =  $user->getPhotoPath() . $filename;
+                Image::make($image)->save($location);
+                $data['document_pic'] = $filename;
+            }
+            if ($image = $request->file('selfie')) {
+                $filename = 'selfie_' . time() . '.' . $ext;
+                $location =  $user->getPhotoPath() . $filename;
+                Image::make($image)->save($location);
+                $data['selfie'] = $filename;
+            }
+            if ($user->document_pic) {
+                unlink($user->getPhotoPath() . $user->document_pic);
+            }
+            if ($user->selfie) {
+                unlink($user->getPhotoPath() . $user->selfie);
+            }
+            $user->update($data);
+            return back()->with('success', 'Request Submitted for Account Verification!');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return back()->with('error', 'Something went wrong!');
+        }
     }
 }

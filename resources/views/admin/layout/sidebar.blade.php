@@ -72,6 +72,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('admin.document_types.index') }}" class="nav-link @if(Route::is('admin.document_types.*')) active @endif">
+                        <i class="icon-home"></i>
+                        <span>
+                            Document Types
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('admin.market_prices.index') }}" class="nav-link @if(Route::is('admin.market_prices.*')) active @endif">
                         <i class="icon-home"></i>
                         <span>

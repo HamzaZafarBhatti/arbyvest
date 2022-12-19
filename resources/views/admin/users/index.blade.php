@@ -47,7 +47,7 @@
                                                         <i class="icon-menu9"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class='dropdown-item' href="{{-- {{ route('admin.users.manage', $val->id) }} --}}"><i
+                                                        <a class='dropdown-item' href="{{ route('admin.users.edit', $val->id) }}"><i
                                                                 class="icon-cogs spinner mr-2"></i>Manage account</a>
                                                         @if (!$val->hasRole('Vendor'))
                                                             <a class='dropdown-item'
