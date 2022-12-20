@@ -18,13 +18,13 @@
                             <label for="old_pin" class="form-label">Old Pin</label>
                             <input type="text" class="form-control @if ($errors->get('old_pin')) is-invalid @endif"
                                 id="old_pin" name="old_pin" required>
-                                @if ($errors->get('old_pin'))
-                                    <div class="invalid-feedback">
-                                        @foreach ((array) $errors->get('old_pin')[0] as $message)
-                                            {{ $message }}
-                                        @endforeach
-                                    </div>
-                                @endif
+                            @if ($errors->get('old_pin'))
+                                <div class="invalid-feedback">
+                                    @foreach ((array) $errors->get('old_pin')[0] as $message)
+                                        {{ $message }}
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -32,13 +32,13 @@
                             <label for="new_pin" class="form-label">New Pin</label>
                             <input type="text" class="form-control @if ($errors->get('new_pin')) is-invalid @endif"
                                 id="new_pin" name="new_pin" required>
-                                @if ($errors->get('new_pin'))
-                                    <div class="invalid-feedback">
-                                        @foreach ((array) $errors->get('new_pin')[0] as $message)
-                                            {{ $message }}
-                                        @endforeach
-                                    </div>
-                                @endif
+                            @if ($errors->get('new_pin'))
+                                <div class="invalid-feedback">
+                                    @foreach ((array) $errors->get('new_pin')[0] as $message)
+                                        {{ $message }}
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-12">

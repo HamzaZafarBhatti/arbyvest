@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\BankUser;
 use App\Models\MarketPrice;
 use App\Models\TransferBalanceLog;
 use App\Models\User;
@@ -92,9 +93,24 @@ class UserController extends Controller
 
     public function do_transfer_balance(Request $request)
     {
+        $request->validate([
+            'amount' => 'required|integer|min:10',
+            'account_id' => 'required',
+            'currency'=> 'required|in:usd,gbp'
+        ]);
         $user = auth()->user();
+        $customer = User::where('account_id', $request->account_id)->first();
         if (!$user->hasRole('Vendor')) {
             return back()->with('error', 'You do not have authority to transfer!');
+        }
+        if (!$user->is_verified) {
+            return back()->with('error', 'Your account is not verified!');
+        }
+        if (!$customer) {
+            return back()->with('error', 'Invalid ACCOUNT ID!');
+        }
+        if ($user->account_id == $request->account_id) {
+            return back()->with('error', 'You cannot transfer balance to yourself!');
         }
         if ($request->currency == 'usd') {
             if ($request->amount < 10) {
@@ -108,13 +124,11 @@ class UserController extends Controller
             $logdata['currency'] = $request->currency;
             $logdata['amount'] = $request->amount;
             $logdata['user_account_id'] = $request->account_id;
-            $vendor = User::where('account_id', $user->account_id)->get();
-            $vendor_usd_wallet = $vendor->usd_wallet - $request->amount;
-            $user = User::where('account_id', $request->account_id)->get();
-            $user_usd_wallet = $user->usd_wallet + $request->amount;
-            DB::transaction(function () use ($vendor_usd_wallet, $user_usd_wallet, $logdata, $vendor, $user) {
-                $vendor->update(['usd_wallet' => $vendor_usd_wallet]);
+            $user_usd_wallet = $user->usd_wallet - $request->amount;
+            $customer_usd_wallet = $customer->usd_wallet + $request->amount;
+            DB::transaction(function () use ($user_usd_wallet, $customer_usd_wallet, $logdata, $user, $customer) {
                 $user->update(['usd_wallet' => $user_usd_wallet]);
+                $customer->update(['usd_wallet' => $customer_usd_wallet]);
                 TransferBalanceLog::create($logdata);
             });
         } else {
@@ -129,13 +143,80 @@ class UserController extends Controller
             $logdata['currency'] = $request->currency;
             $logdata['amount'] = $request->amount;
             $logdata['user_account_id'] = $request->account_id;
-            $vendor = User::where('account_id', $user->account_id)->get();
-            $vendor_gbp_wallet = $vendor->gbp_wallet - $request->amount;
-            $user = User::where('account_id', $request->account_id)->get();
-            $user_gbp_wallet = $user->gbp_wallet + $request->amount;
-            DB::transaction(function () use ($vendor_gbp_wallet, $user_gbp_wallet, $logdata, $vendor, $user) {
-                $vendor->update(['gbp_wallet' => $vendor_gbp_wallet]);
+            $user_gbp_wallet = $user->gbp_wallet - $request->amount;
+            $customer_gbp_wallet = $customer->gbp_wallet + $request->amount;
+            DB::transaction(function () use ($user_gbp_wallet, $customer_gbp_wallet, $logdata, $user, $customer) {
                 $user->update(['gbp_wallet' => $user_gbp_wallet]);
+                $customer->update(['gbp_wallet' => $customer_gbp_wallet]);
+                TransferBalanceLog::create($logdata);
+            });
+        }
+        return redirect()->route('user.transfer_balance')->with('success', 'Amount Transfered to Account ID: ' . $request->account_id);
+    }
+
+    public function withdraw()
+    {
+        $user_bank_details = BankUser::where('user_id', auth()->user()->id)->get();
+        return view('user.withdraw', compact('user_bank_details'));
+    }
+
+    public function do_withdraw(Request $request)
+    {
+        $request->validate([
+            'amount' => 'required|integer|min:10',
+            'pin' => 'required'
+        ]);
+        return back()->with('warning', 'COMING SOON!');
+        $user = auth()->user();
+        $customer = User::where('account_id', $request->account_id)->first();
+        if (!$user->hasRole('Vendor')) {
+            return back()->with('error', 'You do not have authority to transfer!');
+        }
+        if (!$user->is_verified) {
+            return back()->with('error', 'Your account is not verified!');
+        }
+        if (!$customer) {
+            return back()->with('error', 'Invalid ACCOUNT ID!');
+        }
+        if ($user->account_id == $request->account_id) {
+            return back()->with('error', 'You cannot transfer balance to yourself!');
+        }
+        if ($request->currency == 'usd') {
+            if ($request->amount < 10) {
+                return back()->with('error', 'Minimum amount to transfer is $10');
+            }
+            if ($request->amount > $user->usd_wallet) {
+                return back()->with('error', 'Your entered amount is more than your USD balance');
+            }
+            $logdata['ref_id'] = Str::random(10);
+            $logdata['vendor_account_id'] = $user->account_id;
+            $logdata['currency'] = $request->currency;
+            $logdata['amount'] = $request->amount;
+            $logdata['user_account_id'] = $request->account_id;
+            $user_usd_wallet = $user->usd_wallet - $request->amount;
+            $customer_usd_wallet = $customer->usd_wallet + $request->amount;
+            DB::transaction(function () use ($user_usd_wallet, $customer_usd_wallet, $logdata, $user, $customer) {
+                $user->update(['usd_wallet' => $user_usd_wallet]);
+                $customer->update(['usd_wallet' => $customer_usd_wallet]);
+                TransferBalanceLog::create($logdata);
+            });
+        } else {
+            if ($request->amount < 10) {
+                return back()->with('error', 'Minimum amount to transfer is £10');
+            }
+            if ($request->amount > $user->gbp_wallet) {
+                return back()->with('error', 'Your entered amount is more than your GBP balance');
+            }
+            $logdata['ref_id'] = Str::random(10);
+            $logdata['vendor_account_id'] = $user->account_id;
+            $logdata['currency'] = $request->currency;
+            $logdata['amount'] = $request->amount;
+            $logdata['user_account_id'] = $request->account_id;
+            $user_gbp_wallet = $user->gbp_wallet - $request->amount;
+            $customer_gbp_wallet = $customer->gbp_wallet + $request->amount;
+            DB::transaction(function () use ($user_gbp_wallet, $customer_gbp_wallet, $logdata, $user, $customer) {
+                $user->update(['gbp_wallet' => $user_gbp_wallet]);
+                $customer->update(['gbp_wallet' => $customer_gbp_wallet]);
                 TransferBalanceLog::create($logdata);
             });
         }

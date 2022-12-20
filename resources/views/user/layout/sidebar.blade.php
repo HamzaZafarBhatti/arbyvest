@@ -1,6 +1,6 @@
 <aside class="sidebar sidebar-default navs-rounded ">
     <div class="sidebar-header d-flex align-items-center justify-content-start">
-        <a href="../dashboard/index.html" class="navbar-brand dis-none align-items-center justify-content-center">
+        <a href="{{ route('user.dashboard') }}" class="navbar-brand dis-none align-items-center justify-content-center">
             <svg width="36" class="text-primary" viewBox="0 0 128 150" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g>
                     <path
@@ -121,7 +121,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="#">
+                    <a class="nav-link " href="{{ route('user.withdraw') }}">
                         <i class="icon">
                             <svg width="22" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -240,6 +240,7 @@
                         <span class="item-name">Account Profile Settings</span>
                     </a>
                 </li>
+                @if (!auth()->user()->is_verified)
                 <li class="nav-item">
                     <a class="nav-link @if (Route::is('user.verify_account')) active @endif" href="{{ route('user.verify_account') }}">
                         <i class="icon">
@@ -258,6 +259,7 @@
                         <span class="item-name">Account Verification KYC</span>
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link @if (Route::is('user.change_pin')) active @endif" href="{{ route('user.change_pin') }}">
                         <i class="icon">

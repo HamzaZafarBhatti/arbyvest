@@ -38,7 +38,7 @@
                         <div class="form-group">
                             <label class="form-label" for="document_pic">Upload Document</label>
                             <input type="file" class="form-control" id="document_pic" name="document_pic" required
-                                accept="image/*">
+                                accept="image/*,.pdf">
                         </div>
                     </div>
                     <div class="col-md-6">

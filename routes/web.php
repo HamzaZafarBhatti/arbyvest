@@ -104,12 +104,16 @@ Route::middleware('auth')->group(function () {
             Route::post('transfer_balance', 'do_transfer_balance')->name('do_transfer_balance');
             Route::get('change_pin', 'change_pin')->name('change_pin');
             Route::post('change_pin', 'do_change_pin')->name('do_change_pin');
+            Route::get('withdraw', 'withdraw')->name('withdraw');
+            Route::post('withdraw', 'do_withdraw')->name('do_withdraw');
         });
         Route::controller(ProfileController::class)->group(function () {
             Route::get('profile', 'edit')->name('profile.edit');
             Route::patch('profile', 'update')->name('profile.update');
-            Route::get('verify_account', 'verify_account')->name('verify_account');
-            Route::post('verify_account', 'do_verify_account')->name('do_verify_account');
+            Route::middleware('is_not_verified')->group(function () {
+                Route::get('verify_account', 'verify_account')->name('verify_account');
+                Route::post('verify_account', 'do_verify_account')->name('do_verify_account');
+            });
         });
     });
 });
