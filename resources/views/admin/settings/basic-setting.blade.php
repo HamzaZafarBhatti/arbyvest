@@ -63,6 +63,12 @@
                                     <textarea type="text" name="address" rows="4" class="form-control">{{ $set->address }}</textarea>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-lg-2">Withdraw Fee:</label>
+                                <div class="col-lg-10">
+                                    <input type="number" name="withdraw_fee" value="{{ $set->withdraw_fee }}" class="form-control">
+                                </div>
+                            </div>
                             <div class="text-right">
                                 <button type="submit" class="btn bg-dark">Submit<i
                                         class="icon-paperplane ml-2"></i></button>

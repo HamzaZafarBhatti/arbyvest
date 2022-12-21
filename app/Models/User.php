@@ -38,7 +38,6 @@ class User extends Authenticatable
         'ngn_wallet',
         'image',
         'is_verified',
-        'photo',
         'birthdate',
         'document_type_id',
         'document_pic',

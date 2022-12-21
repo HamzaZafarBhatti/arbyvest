@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\BankUser;
 use App\Models\MarketPrice;
+use App\Models\Setting;
 use App\Models\TransferBalanceLog;
 use App\Models\User;
+use App\Models\Withdraw;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules;
@@ -161,12 +163,12 @@ class UserController extends Controller
             });
             $amount = '£ ' . $request->amount;
         }
-        return redirect()->route('user.transfer_balance')->with('success', 'Amount ' . $amount . ' Transfered to Account ID: ' . $customer->account_id .' - '. $customer->name);
+        return redirect()->route('user.transfer_balance')->with('success', 'Amount ' . $amount . ' Transfered to Account ID: ' . $customer->account_id . ' - ' . $customer->name);
     }
 
     public function withdraw()
     {
-        $user_bank_details = BankUser::where('user_id', auth()->user()->id)->get();
+        $user_bank_details = BankUser::with('bank')->where('user_id', auth()->user()->id)->first();
         return view('user.withdraw', compact('user_bank_details'));
     }
 
@@ -174,63 +176,41 @@ class UserController extends Controller
     {
         $request->validate([
             'amount' => 'required|integer|min:10',
+            'bank_user_id' => 'required',
             'pin' => 'required'
         ]);
-        return back()->with('warning', 'COMING SOON!');
+        $bank_user = BankUser::find($request->bank_user_id);
         $user = auth()->user();
-        $customer = User::where('account_id', $request->account_id)->first();
-        if (!$user->hasRole('Vendor')) {
-            return back()->with('error', 'You do not have authority to transfer!');
+        $setting = Setting::first();
+        if (!$user->pin) {
+            return back()->with('error', 'Please setup your Pin!');
+        }
+        if ($user->pin != $request->pin) {
+            return back()->with('error', 'You have entered wrong Pin!');
         }
         if (!$user->is_verified) {
             return back()->with('error', 'Your account is not verified!');
         }
-        if (!$customer) {
-            return back()->with('error', 'Invalid ACCOUNT ID!');
+        $actual_amount = $request->amount;
+        $bank_user_id = $request->bank_user_id;
+        $after_fee_amount = $actual_amount - ($actual_amount * $setting->withdraw_fee / 100);
+        // return $after_fee_amount;
+        if ($actual_amount < 10) {
+            return back()->with('error', 'Minimum amount to withdraw is $10');
         }
-        if ($user->account_id == $request->account_id) {
-            return back()->with('error', 'You cannot transfer balance to yourself!');
+        if ($actual_amount > $user->ngn_wallet) {
+            return back()->with('error', 'Your entered amount is more than your NGN balance');
         }
-        if ($request->currency == 'usd') {
-            if ($request->amount < 10) {
-                return back()->with('error', 'Minimum amount to transfer is $10');
-            }
-            if ($request->amount > $user->usd_wallet) {
-                return back()->with('error', 'Your entered amount is more than your USD balance');
-            }
-            $logdata['ref_id'] = Str::random(10);
-            $logdata['vendor_account_id'] = $user->account_id;
-            $logdata['currency'] = $request->currency;
-            $logdata['amount'] = $request->amount;
-            $logdata['user_account_id'] = $request->account_id;
-            $user_usd_wallet = $user->usd_wallet - $request->amount;
-            $customer_usd_wallet = $customer->usd_wallet + $request->amount;
-            DB::transaction(function () use ($user_usd_wallet, $customer_usd_wallet, $logdata, $user, $customer) {
-                $user->update(['usd_wallet' => $user_usd_wallet]);
-                $customer->update(['usd_wallet' => $customer_usd_wallet]);
-                TransferBalanceLog::create($logdata);
-            });
-        } else {
-            if ($request->amount < 10) {
-                return back()->with('error', 'Minimum amount to transfer is £10');
-            }
-            if ($request->amount > $user->gbp_wallet) {
-                return back()->with('error', 'Your entered amount is more than your GBP balance');
-            }
-            $logdata['ref_id'] = Str::random(10);
-            $logdata['vendor_account_id'] = $user->account_id;
-            $logdata['currency'] = $request->currency;
-            $logdata['amount'] = $request->amount;
-            $logdata['user_account_id'] = $request->account_id;
-            $user_gbp_wallet = $user->gbp_wallet - $request->amount;
-            $customer_gbp_wallet = $customer->gbp_wallet + $request->amount;
-            DB::transaction(function () use ($user_gbp_wallet, $customer_gbp_wallet, $logdata, $user, $customer) {
-                $user->update(['gbp_wallet' => $user_gbp_wallet]);
-                $customer->update(['gbp_wallet' => $customer_gbp_wallet]);
-                TransferBalanceLog::create($logdata);
-            });
-        }
-        return redirect()->route('user.transfer_balance')->with('success', 'Amount Transfered to Account ID: ' . $request->account_id);
+        DB::transaction(function () use ($user, $actual_amount, $after_fee_amount, $bank_user_id) {
+            $user->update(['ngn_wallet' => $user->ngn_wallet - $actual_amount]);
+            Withdraw::create([
+                'user_id' => $user->id,
+                'bank_user_id' => $bank_user_id,
+                'amount' => $after_fee_amount,
+                'status' => 0
+            ]);
+        });
+        return redirect()->route('user.withdraw')->with('success', 'Amount ₦' . number_format($actual_amount, 2) . ' Withdrawed to your Bank Account: ' . $bank_user->get_full_account);
     }
 
     public function verify_trader()
