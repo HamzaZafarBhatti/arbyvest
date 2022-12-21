@@ -6,7 +6,7 @@
         <li>Full Name: {{ $trader->name }}</li>
         <li>WhatsApp Number: {{ $trader->phone }}</li>
         <li>Phone Number: {{ $trader->phone }}</li>
-        <li>Available USD Balance: {{ $trader->getUsdWallet }}</li>
-        <li>Available GBP Balance: {{ $trader->getGbpWallet }}</li>
+        <li>Available USD Balance: {{ $trader->get_usd_wallet }}</li>
+        <li>Available GBP Balance: {{ $trader->get_gbp_wallet }}</li>
     </ul>
 </div>

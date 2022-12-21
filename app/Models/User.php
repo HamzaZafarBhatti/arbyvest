@@ -66,22 +66,45 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function bank()
+    {
+        return $this->hasOne(BankUser::class);
+    }
+
     protected function getUsdWallet(): Attribute
     {
         return Attribute::make(
-            get: fn($val, $attr) => '$ '.$attr['usd_wallet']
+            get: fn($val, $attr) => '$ '.number_format($attr['usd_wallet'],2)
         );
     }
     protected function getGbpWallet(): Attribute
     {
         return Attribute::make(
-            get: fn($val, $attr) => '£ '.$attr['gbp_wallet']
+            get: fn($val, $attr) => '£ '.number_format($attr['gbp_wallet'],2)
         );
     }
     protected function getNgnWallet(): Attribute
     {
         return Attribute::make(
-            get: fn($val, $attr) => '₦ '.$attr['ngn_wallet']
+            get: fn($val, $attr) => '₦ '.number_format($attr['ngn_wallet'],2)
+        );
+    }
+    protected function getUserImage(): Attribute
+    {
+        return Attribute::make(
+            get: fn($val, $attr) => $this->photo_path.$attr['image']
+        );
+    }
+    protected function getUserDocument(): Attribute
+    {
+        return Attribute::make(
+            get: fn($val, $attr) => $this->photo_path.$attr['document_pic']
+        );
+    }
+    protected function getUserSelfie(): Attribute
+    {
+        return Attribute::make(
+            get: fn($val, $attr) => $this->photo_path.$attr['selfie']
         );
     }
 

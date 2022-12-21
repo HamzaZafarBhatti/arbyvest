@@ -110,6 +110,10 @@ Route::middleware('auth')->group(function () {
         Route::controller(ProfileController::class)->group(function () {
             Route::get('profile', 'edit')->name('profile.edit');
             Route::patch('profile', 'update')->name('profile.update');
+            Route::get('bank_details', 'create_bank_details')->name('create_bank_details');
+            Route::get('bank_details/{id}', 'edit_bank_details')->name('edit_bank_details');
+            Route::post('bank_details', 'store_bank_details')->name('store_bank_details');
+            Route::patch('bank_details/{id}', 'update_bank_details')->name('update_bank_details');
             Route::middleware('is_not_verified')->group(function () {
                 Route::get('verify_account', 'verify_account')->name('verify_account');
                 Route::post('verify_account', 'do_verify_account')->name('do_verify_account');

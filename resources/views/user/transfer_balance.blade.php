@@ -38,13 +38,13 @@
                         <h3 class="text-warning">SELECT CURRENCY</h3>
                         <div class="form-check @if ($errors->get('currency')) is-invalid @endif">
                             <input type="radio" class="form-check-input" name="currency" id="usd" value="usd">
-                            <label for="usd" class="form-check-label pl-2">US DOllars
-                                (${{ auth()->user()->usd_wallet }})</label>
+                            <label for="usd" class="form-check-label pl-2">US Dollars
+                                ({{ auth()->user()->get_usd_wallet }})</label>
                         </div>
                         <div class="form-check @if ($errors->get('currency')) is-invalid @endif">
                             <input type="radio" class="form-check-input" name="currency" id="gbp" value="gbp">
                             <label for="gbp" class="form-check-label pl-2">British Pounds
-                                (£{{ auth()->user()->gbp_wallet }})</label>
+                                ({{ auth()->user()->get_gbp_wallet }})</label>
                         </div>
                         @if ($errors->get('currency'))
                             <div class="invalid-feedback">

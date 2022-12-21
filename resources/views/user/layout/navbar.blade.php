@@ -177,8 +177,8 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link py-0 d-flex align-items-center" href="#" id="navbarDropdown"
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{asset(auth()->user()->image ? 'asset/user/images/'.auth()->user()->image : 'asset/user/images/avatars/01.png')}}" alt="User-Profile"
-                            class="img-fluid avatar avatar-50 avatar-rounded">
+                        <img src="{{asset(auth()->user()->image ? auth()->user()->get_user_image : 'asset/user/images/avatars/01.png')}}" alt="User-Profile"
+                            class="img-fluid avatar avatar-50 avatar-rounded" style="object-fit: cover">
                         <div class="caption ms-3 ">
                             <h6 class="mb-0 caption-title">Account ID</h6>
                             <p class="mb-0 caption-sub-title text-uppercase">{{ auth()->user()->account_id }}</p>

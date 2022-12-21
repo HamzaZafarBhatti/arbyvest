@@ -97,13 +97,13 @@ class UserController extends Controller
             'amount' => 'required|integer|min:10',
             'account_id' => 'required',
             'pin' => 'required',
-            'currency'=> 'required|in:usd,gbp'
+            'currency' => 'required|in:usd,gbp'
         ]);
         $user = auth()->user();
-        if(!$user->pin) {
+        if (!$user->pin) {
             return back()->with('error', 'Please setup your Pin!');
         }
-        if($user->pin != $request->pin) {
+        if ($user->pin != $request->pin) {
             return back()->with('error', 'You have entered wrong Pin!');
         }
         $customer = User::where('account_id', $request->account_id)->first();
@@ -119,6 +119,7 @@ class UserController extends Controller
         if ($user->account_id == $request->account_id) {
             return back()->with('error', 'You cannot transfer balance to yourself!');
         }
+
         if ($request->currency == 'usd') {
             if ($request->amount < 10) {
                 return back()->with('error', 'Minimum amount to transfer is $10');
@@ -138,6 +139,7 @@ class UserController extends Controller
                 $customer->update(['usd_wallet' => $customer_usd_wallet]);
                 TransferBalanceLog::create($logdata);
             });
+            $amount = '$ ' . $request->amount;
         } else {
             if ($request->amount < 10) {
                 return back()->with('error', 'Minimum amount to transfer is £10');
@@ -157,8 +159,9 @@ class UserController extends Controller
                 $customer->update(['gbp_wallet' => $customer_gbp_wallet]);
                 TransferBalanceLog::create($logdata);
             });
+            $amount = '£ ' . $request->amount;
         }
-        return redirect()->route('user.transfer_balance')->with('success', 'Amount Transfered to Account ID: ' . $request->account_id);
+        return redirect()->route('user.transfer_balance')->with('success', 'Amount ' . $amount . ' Transfered to Account ID: ' . $customer->account_id .' - '. $customer->name);
     }
 
     public function withdraw()
@@ -261,7 +264,7 @@ class UserController extends Controller
         try {
             $user = $request->user();
             $old_pin = $user->pin;
-            if($old_pin && $old_pin != $request->old_pin) {
+            if ($old_pin && $old_pin != $request->old_pin) {
                 return back()->with('error', 'You have entered wrong old pin!');
             }
             $user->update([
