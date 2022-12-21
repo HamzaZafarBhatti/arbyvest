@@ -69,6 +69,22 @@
                             @endif
                         </div>
                     </div>
+                    <div class="col-md-6 col-12 pt-3">
+                        <div class="form-group">
+                            <h3 class="text-warning">PIN</h3>
+                            <input type="text" name="pin"
+                                class="form-control @if ($errors->get('pin')) is-invalid @endif"
+                                aria-describedby="pin">
+                            <a href="{{ route('user.change_pin') }}">Please setup/change your Pin</a>
+                            @if ($errors->get('pin'))
+                                <div class="invalid-feedback">
+                                    @foreach ((array) $errors->get('pin')[0] as $message)
+                                        {{ $message }}
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                     <div class="col-md-12 text-center">
                         <div class="pt-2">
                             <button class="btn btn-primary" type="submit">

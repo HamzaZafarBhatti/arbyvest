@@ -96,6 +96,7 @@ class UserController extends Controller
         $request->validate([
             'amount' => 'required|integer|min:10',
             'account_id' => 'required',
+            'pin' => 'required',
             'currency'=> 'required|in:usd,gbp'
         ]);
         $user = auth()->user();
@@ -253,6 +254,10 @@ class UserController extends Controller
         ]);
         try {
             $user = $request->user();
+            $old_pin = $user->pin;
+            if($old_pin && $old_pin != $request->old_pin) {
+                return back()->with('error', 'You have entered wrong old pin!');
+            }
             $user->update([
                 'pin' => $request->new_pin
             ]);

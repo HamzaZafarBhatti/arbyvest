@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="new_pin_confirmation" class="form-label">Old Pin</label>
+                            <label for="new_pin_confirmation" class="form-label">Confirm New Pin</label>
                             <input type="text" class="form-control" id="new_pin_confirmation" name="new_pin_confirmation"
                                 required>
                         </div>
