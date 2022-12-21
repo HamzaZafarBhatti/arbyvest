@@ -100,6 +100,12 @@ class UserController extends Controller
             'currency'=> 'required|in:usd,gbp'
         ]);
         $user = auth()->user();
+        if(!$user->pin) {
+            return back()->with('error', 'Please setup your Pin!');
+        }
+        if($user->pin != $request->pin) {
+            return back()->with('error', 'You have entered wrong Pin!');
+        }
         $customer = User::where('account_id', $request->account_id)->first();
         if (!$user->hasRole('Vendor')) {
             return back()->with('error', 'You do not have authority to transfer!');
