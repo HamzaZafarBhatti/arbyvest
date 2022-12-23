@@ -25,8 +25,12 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $user_document_url = asset($user->get_user_document);
-        return $user_document_url;
-        $ext = pathinfo($user_document_url)['extension'];
+        $ext = pathinfo($user_document_url);
+        if(isset($ext['extension'])) {
+            $ext = $ext['extension'];
+        } else {
+            $ext = null;
+        }
         return view('user.profile.edit', [
             'user' => $user,
             'ext' => $ext,

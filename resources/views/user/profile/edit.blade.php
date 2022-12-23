@@ -122,10 +122,14 @@
                         <div class="col-md-12">
                             <h5>Document Uplaoded</h5>
                             <div>
-                                @if ($ext == 'pdf')
-                                    <a href="{{ $user_document_url }}" target="_blank">View Document</a>
+                                @if(!$ext)
+                                    <p>No Verfication Document Uploaded</p>
                                 @else
-                                    <img src="{{ $user_document_url }}" width="100%">
+                                    @if ($ext == 'pdf')
+                                        <a href="{{ $user_document_url }}" target="_blank">View Document</a>
+                                    @else
+                                        <img src="{{ $user_document_url }}" width="100%">
+                                    @endif
                                 @endif
                             </div>
                         </div>
