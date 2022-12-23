@@ -185,14 +185,26 @@
                                 <li>Document Type: <span
                                     class="font-weight-semibold">{{ $user->document_type ? $user->document_type->name : 'Not Selected' }}</span>
                                 </li>
-                                <li>Document Picture:
+                                <li>Document:
                                     <span>
-                                        <img src="{{ url('/').'/'.$user->getPhotoPath().$user->document_pic }}" alt="" width="100%">
+                                        @if(!$ext)
+                                            <p>No Verfication Document Uploaded</p>
+                                        @else
+                                            @if ($ext == 'pdf')
+                                                <a href="{{ $user_document_url }}" target="_blank">View Document</a>
+                                            @else
+                                                <img src="{{ $user_document_url }}" width="100%">
+                                            @endif
+                                        @endif
                                     </span>
                                 </li>
                                 <li>Selfie:
                                     <span>
-                                        <img src="{{ url('/').'/'.$user->getPhotoPath().$user->selfie }}" alt="" width="100%">
+                                        @if ($user->selfie)
+                                            <img src="{{ asset($user->get_user_selfie) }}" width="100%">
+                                        @else
+                                            <p>No Selfie Uploaded</p>
+                                        @endif
                                     </span>
                                 </li>
                             </ul>
