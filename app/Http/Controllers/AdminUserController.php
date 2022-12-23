@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AccountVerification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -121,6 +122,7 @@ class AdminUserController extends Controller
             $user->update([
                 'is_verified' => 1
             ]);
+            event(new AccountVerification($user));
             return back()->with('success', 'User has been verified!');
         } catch(Throwable $th) {
             Log::error('Error: '.$th->getMessage());
