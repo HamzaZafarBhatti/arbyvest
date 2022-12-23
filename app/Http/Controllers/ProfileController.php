@@ -25,6 +25,7 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $user_document_url = asset($user->get_user_document);
+        return $user_document_url;
         $ext = pathinfo($user_document_url)['extension'];
         return view('user.profile.edit', [
             'user' => $user,
