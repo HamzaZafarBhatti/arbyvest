@@ -116,7 +116,11 @@
                         <div class="col-md-12">
                             <h5>Selfie</h5>
                             <div>
-                                <img src="{{ asset($user->get_user_selfie) }}" width="100%">
+                                @if ($user->selfie)
+                                    <img src="{{ asset($user->get_user_selfie) }}" width="100%">
+                                @else
+                                    <p>No Selfie Uploaded</p>
+                                @endif
                             </div>
                         </div>
                         <div class="col-md-12">
