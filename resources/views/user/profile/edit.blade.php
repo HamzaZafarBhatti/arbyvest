@@ -114,6 +114,18 @@
                             </ul>
                         </div>
                         <div class="col-md-12">
+                            <h5>Joined</h5>
+                            <div>
+                                {{ date('Y/m/d h:i:A', strtotime($user->created_at)) }}
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <h5>Document Type</h5>
+                            <div>
+                                {{ $user->document_type ? $user->document_type->name : 'Not Selected' }}
+                            </div>
+                        </div>
+                        <div class="col-md-12">
                             <h5>Selfie</h5>
                             <div>
                                 @if ($user->selfie)
