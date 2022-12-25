@@ -1,4 +1,6 @@
-@extends('admin.master')
+@extends('admin.layout.master')
+
+@section('title', 'Declined Withdraw List')
 
 @section('content')
     <div class="content">
@@ -14,9 +16,8 @@
                                 <tr>
                                     <th>S/N</th>
                                     <th>Name</th>
-                                    <th>Facebook Profile Link</th>
                                     <th>Amount</th>                                                                       
-                                    <th>Account number</th>
+                                    <th>Account Number</th>
                                     <th>Bank name</th>
                                     <th>Created</th>
                                     <th>Updated</th>
@@ -24,14 +25,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach($withdraw as $k=>$val)
+                            @foreach($withdraws as $k=>$val)
                                 <tr>
                                     <td>{{++$k}}.</td>
                                     <td>{{-- <a href="{{url('admin/manage-user')}}/{{$val->user_id}}"> --}}{{$val->user->name}}{{-- </a> --}}</td>
-                                    <td>{{ $val->user->fb_url ?? 'N/A' }}</td>
-                                    <td>{{substr($val->amount,0,9)}}BTC</td>
-                                    <td>{{$val->account_no}}</td> 
-                                    <td>{{$val->bank_name}}</td> 
+                                    <td>{{ $val->get_amount }}</td>
+                                    <td>{{ $val->bank_user->account_number }}</td>
+                                    <td>{{ $val->bank_user->bank->name }}</td>
                                     <td>{{date("Y/m/d h:i:A", strtotime($val->created_at))}}</td>
                                     <td>{{date("Y/m/d h:i:A", strtotime($val->updated_at))}}</td>
                                     <td class="text-center">
@@ -58,7 +58,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-                                                <a  href="{{ route('admin.ref.withdraw_delete', $val->id) }}" class="btn bg-danger">Proceed</a>
+                                                <a  href="{{ route('admin.withdraws.delete', $val->id) }}" class="btn bg-danger">Proceed</a>
                                             </div>
                                         </div>
                                     </div>

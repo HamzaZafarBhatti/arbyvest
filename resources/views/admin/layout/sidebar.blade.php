@@ -56,7 +56,8 @@
 
                 <!-- Main -->
                 <li class="nav-item">
-                    <a href="{{ route('admin.dashboard') }}" class="nav-link @if(Route::is('admin.dashboard')) active @endif">
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="nav-link @if (Route::is('admin.dashboard')) active @endif">
                         <i class="icon-home4"></i>
                         <span>
                             Dashboard
@@ -64,7 +65,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.banks.index') }}" class="nav-link @if(Route::is('admin.banks.*')) active @endif">
+                    <a href="{{ route('admin.banks.index') }}"
+                        class="nav-link @if (Route::is('admin.banks.*')) active @endif">
                         <i class="icon-home"></i>
                         <span>
                             Banks
@@ -72,7 +74,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.document_types.index') }}" class="nav-link @if(Route::is('admin.document_types.*')) active @endif">
+                    <a href="{{ route('admin.document_types.index') }}"
+                        class="nav-link @if (Route::is('admin.document_types.*')) active @endif">
                         <i class="icon-home"></i>
                         <span>
                             Document Types
@@ -80,35 +83,41 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.market_prices.index') }}" class="nav-link @if(Route::is('admin.market_prices.*')) active @endif">
+                    <a href="{{ route('admin.market_prices.index') }}"
+                        class="nav-link @if (Route::is('admin.market_prices.*')) active @endif">
                         <i class="icon-home"></i>
                         <span>
                             Market Prices
                         </span>
                     </a>
                 </li>
-                <li class="nav-item nav-item-submenu @if(Route::is(['admin.roles.*','admin.users.*'])) nav-item-open @endif">
+                <li class="nav-item nav-item-submenu @if (Route::is(['admin.roles.*', 'admin.users.*'])) nav-item-open @endif">
                     <a href="#" class="nav-link"><i class="icon-user-plus"></i> <span>User
                             Manangement</span></a>
-                    <ul class="nav nav-group-sub" data-submenu-title="User Manangement" @if(Route::is(['admin.roles.*','admin.users.*'])) style="display: block" @endif>
+                    <ul class="nav nav-group-sub" data-submenu-title="User Manangement"
+                        @if (Route::is(['admin.roles.*', 'admin.users.*'])) style="display: block" @endif>
                         <li class="nav-item">
-                            <a href="{{ route('admin.roles.index') }}" class="nav-link @if(Route::is('admin.roles.index')) active @endif">
+                            <a href="{{ route('admin.roles.index') }}"
+                                class="nav-link @if (Route::is('admin.roles.index')) active @endif">
                                 <i class="icon-user"></i>Roles
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.users.index') }}" class="nav-link @if(Route::is('admin.users.index')) active @endif">
+                            <a href="{{ route('admin.users.index') }}"
+                                class="nav-link @if (Route::is('admin.users.index')) active @endif">
                                 <i class="icon-user"></i>User Accounts
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item nav-item-submenu @if(Route::is('admin.settings.*')) nav-item-open @endif">
+                <li class="nav-item nav-item-submenu @if (Route::is('admin.settings.*')) nav-item-open @endif">
                     <a href="#" class="nav-link"><i class="icon-cogs spinner"></i> <span>System
                             configuration</span></a>
-                    <ul class="nav nav-group-sub" data-submenu-title="System configuration" @if(Route::is('admin.settings.*')) style="display: block" @endif>
+                    <ul class="nav nav-group-sub" data-submenu-title="System configuration"
+                        @if (Route::is('admin.settings.*')) style="display: block" @endif>
                         <li class="nav-item">
-                            <a href="{{ route('admin.settings.index') }}" class="nav-link @if(Route::is('admin.settings.index')) active @endif">
+                            <a href="{{ route('admin.settings.index') }}"
+                                class="nav-link @if (Route::is('admin.settings.index')) active @endif">
                                 <i class="icon-hammer-wrench"></i>Settings
                             </a>
                         </li>
@@ -118,18 +127,19 @@
                                     class="icon-bubble"></i>Sms</a></li>
                         <li class="nav-item"><a href="{{ route('admin.account') }}" class="nav-link"><i
                                     class="icon-user"></i>Account information</a> --}}
-                        </li>
-                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.user_transfer_balance_logs') }}" class="nav-link @if(Route::is('admin.user_transfer_balance_logs')) active @endif">
-                        <i class="icon-home"></i>
-                        <span>
-                            User Transfer Logs
-                        </span>
-                    </a>
-                </li>
-                {{-- <li class="nav-item nav-item-submenu">
+            </ul>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.user_transfer_balance_logs') }}"
+                    class="nav-link @if (Route::is('admin.user_transfer_balance_logs')) active @endif">
+                    <i class="icon-home"></i>
+                    <span>
+                        User Transfer Logs
+                    </span>
+                </a>
+            </li>
+            {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-pulse2"></i>
                         <span>MLM Plans</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="PY scheme">
@@ -141,7 +151,7 @@
                                     class="icon-add"></i>Generate Coupons</a></li>
                     </ul>
                 </li> --}}
-                {{-- <li class="nav-item nav-item-submenu">
+            {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-pulse2"></i>
                         <span>Investment</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="PY scheme">
@@ -153,26 +163,29 @@
                                     class="icon-add"></i>Generate Coupons</a></li>
                     </ul>
                 </li> --}}
-                {{-- <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link"><i class="icon-share2"></i><span>Affiliate Balance
-                            Withdraw
-                            system</span></a>
-                    <ul class="nav nav-group-sub" data-submenu-title="Withdraw">
-                        <li class="nav-item"><a href="{{ route('admin.affliate.withdraw_log') }}"
-                                class="nav-link"><i class="icon-list-unordered"></i>Withdraw log</a>
-                        </li>
-                        <li class="nav-item"><a href="{{ route('admin.affliate.withdraw_unpaid') }}"
-                                class="nav-link"><i class="icon-spinner2 spinner"></i>Unpaid
-                                withdrawal</a></li>
-                        <li class="nav-item"><a href="{{ route('admin.affliate.withdraw_approved') }}"
-                                class="nav-link"><i class="icon-thumbs-up2"></i>Approved withdrawal</a>
-                        </li>
-                        <li class="nav-item"><a href="{{ route('admin.affliate.withdraw_declined') }}"
-                                class="nav-link"><i class="icon-accessibility"></i>Declined
-                                withdrawal</a></li>
-                    </ul>
-                </li> --}}
-                {{-- <li class="nav-item nav-item-submenu">
+            <li class="nav-item nav-item-submenu @if (Route::is('admin.withdraws.*')) nav-item-open @endif">
+                <a href="#" class="nav-link"><i class="icon-share2"></i><span>Withdraw System</span></a>
+                <ul class="nav nav-group-sub" data-submenu-title="Withdraw"
+                    @if (Route::is('admin.withdraws.*')) style="display: block" @endif>
+                    <li class="nav-item"><a href="{{ route('admin.withdraws.index') }}"
+                            class="nav-link @if (Route::is('admin.withdraws.index')) active @endif"><i
+                                class="icon-list-unordered"></i>Withdraw Log</a>
+                    </li>
+                    <li class="nav-item"><a href="{{ route('admin.withdraws.unpaid') }}"
+                            class="nav-link @if (Route::is('admin.withdraws.unpaid')) active @endif"><i
+                                class="icon-spinner2 spinner"></i>Unpaid
+                            Withdrawal</a></li>
+                    <li class="nav-item"><a href="{{ route('admin.withdraws.approved') }}"
+                            class="nav-link @if (Route::is('admin.withdraws.approved')) active @endif"><i
+                                class="icon-thumbs-up2"></i>Approved Withdrawal</a>
+                    </li>
+                    <li class="nav-item"><a href="{{ route('admin.withdraws.declined') }}"
+                            class="nav-link @if (Route::is('admin.withdraws.declined')) active @endif"><i
+                                class="icon-accessibility"></i>Declined
+                            Withdrawal</a></li>
+                </ul>
+            </li>
+            {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-share2"></i><span>MLM Balance Wallet
                             Withdraw
                             system</span></a>
@@ -191,7 +204,7 @@
                                 withdrawal</a></li>
                     </ul>
                 </li> --}}
-                {{-- <li class="nav-item nav-item-submenu">
+            {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-share2"></i><span>Referral Balance
                             Wallet
                             Withdraw
@@ -211,7 +224,7 @@
                                 withdrawal</a></li>
                     </ul>
                 </li> --}}
-                {{-- <li class="nav-item nav-item-submenu">
+            {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-share2"></i><span>Paymentproof
                             system</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="Paymentproof">
@@ -229,7 +242,7 @@
                                 paymentproof</a></li>
                     </ul>
                 </li> --}}
-                {{-- <li class="nav-item nav-item-submenu">
+            {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-magazine"></i> <span>News
                             Section</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="News Section">
@@ -239,7 +252,7 @@
                                     class="icon-newspaper"></i>Articles</a></li>
                     </ul>
                 </li> --}}
-                {{-- <li class="nav-item nav-item-submenu">
+            {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-home4"></i> <span>Web
                             control</span></a>
 

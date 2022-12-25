@@ -44,6 +44,7 @@ class User extends Authenticatable
         'selfie',
         'pin',
         'whatsapp_number',
+        'show_popup',
     ];
 
     /**

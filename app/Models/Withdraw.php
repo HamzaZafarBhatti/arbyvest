@@ -26,4 +26,11 @@ class Withdraw extends Model
     {
         return $this->belongsTo(BankUser::class);
     }
+
+    protected function getAmount(): Attribute
+    {
+        return Attribute::make(
+            get: fn($val, $attr) => '₦ '.number_format($attr['amount'],2)
+        );
+    }
 }

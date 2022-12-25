@@ -6,7 +6,10 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header header-elements-inline">
-                        <h6 class="card-title font-weight-semibold">Withdraw logs</h6>
+                        <h6 class="card-title font-weight-semibold">Pending Withdrawal logs</h6>
+                        <div class="header-elements">
+                            <button type="button" class="btn btn-primary approve_multi" disabled>Approve Checked</button>
+                        </div>
                     </div>
                     <div class="">
                         <table class="table datatable-button-init-basic">
@@ -14,35 +17,22 @@
                                 <tr>
                                     <th>S/N</th>
                                     <th>Account Name</th>
-                                    <th>Facebook Profile Link</th>
                                     <th>Amount</th>
                                     <th>Account Number</th>
-                                    <th>Bank Name</th>
-                                    <th>Status</th>
+                                    <th>Bank name</th>
                                     <th>Created</th>
                                     <th>Updated</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($withdraw as $k => $val)
+                                @foreach ($withdraws as $k => $val)
                                     <tr>
-                                        <td>{{ ++$k }}.</td>
-                                        <td>{{-- <a href="{{ url('admin/manage-user') }}/{{ $val->user_id }}"> --}}{{ $val->user->name }}{{-- </a> --}}
-                                        </td>
-                                        <td>{{ $val->user->fb_url ?? 'N/A' }}</td>
-                                        <td>₦{{ substr($val->amount, 0, 9) }}</td>
-                                        <td>{{ $val->account_no }}</td>
-                                        <td>{{ $val->bank_name }}</td>
-                                        <td>
-                                            @if ($val->status == 0)
-                                                <span class="badge badge-danger">Unpaid</span>
-                                            @elseif($val->status == 1)
-                                                <span class="badge badge-success">Paid</span>
-                                            @elseif($val->status == 2)
-                                                <span class="badge badge-info">Declined</span>
-                                            @endif
-                                        </td>
+                                        <td>{{ ++$k }}. <input type="checkbox" class="withdraw_ids" name="withdraw_ids" value="{{ $val->id }}"></td>
+                                        <td>{{ $val->user->name }}</td>
+                                        <td>{{ $val->get_amount }}</td>
+                                        <td>{{ $val->bank_user->account_number }}</td>
+                                        <td>{{ $val->bank_user->bank->bank_name }}</td>
                                         <td>{{ date('Y/m/d h:i:A', strtotime($val->created_at)) }}</td>
                                         <td>{{ date('Y/m/d h:i:A', strtotime($val->updated_at)) }}</td>
                                         <td class="text-center">
@@ -94,7 +84,8 @@
                                                     <button type="button" class="close"
                                                         data-dismiss="modal">&times;</button>
                                                 </div>
-                                                <form action="{{ route('admin.ref.withdraw_approve') }}" method="post">
+                                                <form action="{{ route('admin.ref.withdraw_approve') }}"
+                                                    method="post">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{ $val->id }}">
                                                     <div class="modal-body">
@@ -151,6 +142,33 @@
                 } else {
                     _this.parents('.modal').find('.payment_value').addClass('d-none')
                 }
+            })
+            $(document).on('click', '.withdraw_ids', function() {
+                console.log($('.withdraw_ids:checked').length);
+                if ($('.withdraw_ids:checked').length) {
+                    $('.approve_multi').removeAttr('disabled');
+                } else {
+                    $('.approve_multi').attr('disabled', 'disabled');
+                }
+            })
+            $('.approve_multi').click(function() {
+                var approve_ids = []
+                $('.withdraw_ids:checked').map(function(index, value) {
+                    approve_ids.push(value.value);
+                })
+
+                $.ajax({
+                    url: '{{ route('admin.ref.withdraw_approve_multi') }}',
+                    method: 'POST',
+                    data: {
+                        ids: approve_ids,
+                        '_token': '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        // console.log(response)
+                        location.reload(true);
+                    }
+                })
             })
         })
     </script>

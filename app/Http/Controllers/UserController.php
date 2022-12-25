@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
+use App\Mail\GeneralEmail;
 use App\Models\BankUser;
 use App\Models\MarketPrice;
 use App\Models\Setting;
@@ -13,8 +14,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules;
 use App\Providers\RouteServiceProvider;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -174,6 +177,14 @@ class UserController extends Controller
 
     public function do_withdraw(Request $request)
     {
+        $today = Carbon::now();
+        $day_of_week = $today->format('l');
+        if($day_of_week != 'Sunday') {
+            return back()->with('alert', 'You can request to withdraw every Sunday to your BANK Account only.');
+        }
+        if($today->hour < 7 || $today->hour > 10) {
+            return back()->with('alert', 'You can cashout your Video Earning Points from 7am to 10am.');
+        }
         $request->validate([
             'amount' => 'required|integer|min:10',
             'bank_user_id' => 'required',
@@ -203,12 +214,13 @@ class UserController extends Controller
         }
         DB::transaction(function () use ($user, $actual_amount, $after_fee_amount, $bank_user_id) {
             $user->update(['ngn_wallet' => $user->ngn_wallet - $actual_amount]);
-            Withdraw::create([
+            $data = Withdraw::create([
                 'user_id' => $user->id,
                 'bank_user_id' => $bank_user_id,
                 'amount' => $after_fee_amount,
                 'status' => 0
             ]);
+            Mail::to($user->email)->send(new GeneralEmail($user->username, 'Withdrawal request of ₦' . substr($data->amount, 0, 9) . ' is pending<br>Thanks for working with us.', 'Withdraw Request is pending'));
         });
         return redirect()->route('user.withdraw')->with('success', 'Amount ₦' . number_format($actual_amount, 2) . ' Withdrawed to your Bank Account: ' . $bank_user->get_full_account);
     }

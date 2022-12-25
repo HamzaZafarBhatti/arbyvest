@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -83,12 +84,21 @@ Route::middleware('auth')->group(function () {
         });
         Route::controller(AdminUserController::class)->name('users.')->group(function() {
             Route::get('make-vendor/{id}', 'makeVendor')->name('make-vendor');
+            Route::post('verify_account', 'do_verify_account')->name('users.verify_account');
+        });
+        Route::controller(WithdrawController::class)->prefix('withdraws')->name('withdraws.')->group(function() {
+            Route::get('/', 'index')->name('index');
+            Route::get('unpaid', 'unpaid')->name('unpaid');
+            Route::get('approved', 'approved')->name('approved');
+            Route::get('declined', 'declined')->name('declined');
+            Route::get('decline/{id}', 'decline')->name('decline');
+            Route::post('approve', 'approve')->name('approve');
+            Route::get('delete/{id}', 'delete')->name('delete');
         });
         Route::resource('banks', BankController::class)->except('create', 'show');
         Route::resource('market_prices', MarketPriceController::class)->except('create', 'show');
         Route::resource('roles', RoleController::class)->except('create', 'show', 'delete');
         Route::resource('users', AdminUserController::class)->except('create', 'show', 'delete');
-        Route::post('verify_account', [AdminUserController::class, 'do_verify_account'])->name('users.verify_account');
         Route::resource('document_types', DocumentTypeController::class)->except('create', 'show');
     });
     // User
