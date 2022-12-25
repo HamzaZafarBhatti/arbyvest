@@ -116,6 +116,7 @@ Route::middleware('auth')->group(function () {
             Route::post('change_pin', 'do_change_pin')->name('do_change_pin');
             Route::get('withdraw', 'withdraw')->name('withdraw');
             Route::post('withdraw', 'do_withdraw')->name('do_withdraw');
+            Route::get('upload_proof', 'upload_proof')->name('upload_proof');
         });
         Route::controller(ProfileController::class)->group(function () {
             Route::get('profile', 'edit')->name('profile.edit');

@@ -43,6 +43,24 @@
     <script src="{{ asset('asset/user/js/app.js') }}"></script>
     <!-- apexchart JavaScript -->
     <script src="{{ asset('asset/user/js/charts/apexcharts.js') }}"></script>
+
+    <script src="{{ asset('asset/admin/global_assets/js/plugins/notifications/sweet_alert.min.js') }}"></script>
+    <script>
+        if ("{{ $user_proof }}" == 1) {
+            swal({
+                    title: "Upload Your Payment PROOF!",
+                    text: "✨CONGRATULATIONS ON YOUR LATEST CASHOUT. ✨",
+                    icon: "success",
+                    buttons: true,
+                    dangerMode: false,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        window.location.href = "{{ route('user.upload_proof') }}"
+                    }
+                });
+        }
+    </script>
 </body>
 
 </html>
