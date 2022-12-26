@@ -69,6 +69,18 @@
                                     <input type="number" name="withdraw_fee" value="{{ $set->withdraw_fee }}" class="form-control">
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-lg-2">Min Withdrawal:</label>
+                                <div class="col-lg-10">
+                                    <input type="number" name="min_withdrawal" value="{{ $set->min_withdrawal }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-lg-2">Max Withdrawal:</label>
+                                <div class="col-lg-10">
+                                    <input type="number" name="max_withdrawal" value="{{ $set->max_withdrawal }}" class="form-control">
+                                </div>
+                            </div>
                             <div class="text-right">
                                 <button type="submit" class="btn bg-dark">Submit<i
                                         class="icon-paperplane ml-2"></i></button>

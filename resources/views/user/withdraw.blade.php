@@ -51,6 +51,9 @@
                                     {{ $user_bank_details->get_full_account }}</option>
                             @endif
                         </select>
+                        @if ($user_bank_details)
+                            @include('user.partials.change_bank_details')
+                        @endif
                         @if ($errors->get('bank_user_id'))
                             <div class="invalid-feedback">
                                 @foreach ((array) $errors->get('bank_user_id')[0] as $message)
@@ -63,6 +66,7 @@
                         <h3 class="text-warning">Enter PIN</h3>
                         <input type="text" name="pin"
                             class="form-control @if ($errors->get('pin')) is-invalid @endif" aria-describedby="pin">
+                        @include('user.partials.change_pin')
                         @if ($errors->get('pin'))
                             <div class="invalid-feedback">
                                 @foreach ((array) $errors->get('pin')[0] as $message)

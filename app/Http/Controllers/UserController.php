@@ -177,14 +177,14 @@ class UserController extends Controller
 
     public function do_withdraw(Request $request)
     {
-        $today = Carbon::now();
-        $day_of_week = $today->format('l');
-        if($day_of_week != 'Sunday') {
-            return back()->with('alert', 'You can request to withdraw every Sunday to your BANK Account only.');
-        }
-        if($today->hour < 7 || $today->hour > 10) {
-            return back()->with('alert', 'You can cashout your Video Earning Points from 7am to 10am.');
-        }
+        // $today = Carbon::now();
+        // $day_of_week = $today->format('l');
+        // if($day_of_week != 'Sunday') {
+        //     return back()->with('warning', 'You can request to withdraw every Sunday to your BANK Account only.');
+        // }
+        // if($today->hour < 7 || $today->hour > 10) {
+        //     return back()->with('warning', 'You can cashout your Video Earning Points from 7am to 10am.');
+        // }
         $request->validate([
             'amount' => 'required|integer|min:10',
             'bank_user_id' => 'required',
@@ -193,24 +193,27 @@ class UserController extends Controller
         $bank_user = BankUser::find($request->bank_user_id);
         $user = auth()->user();
         $setting = Setting::first();
+        if (!$user->is_verified) {
+            return back()->with('error', 'Your account is not verified!');
+        }
         if (!$user->pin) {
             return back()->with('error', 'Please setup your Pin!');
         }
         if ($user->pin != $request->pin) {
             return back()->with('error', 'You have entered wrong Pin!');
         }
-        if (!$user->is_verified) {
-            return back()->with('error', 'Your account is not verified!');
-        }
         $actual_amount = $request->amount;
         $bank_user_id = $request->bank_user_id;
         $after_fee_amount = $actual_amount - ($actual_amount * $setting->withdraw_fee / 100);
         // return $after_fee_amount;
-        if ($actual_amount < 10) {
-            return back()->with('error', 'Minimum amount to withdraw is $10');
+        if ($actual_amount < $setting->min_withdrawal) {
+            return back()->with('error', 'Minimum amount to withdraw is ₦'.$setting->min_withdrawal);
         }
         if ($actual_amount > $user->ngn_wallet) {
             return back()->with('error', 'Your entered amount is more than your NGN balance');
+        }
+        if ($actual_amount > $setting->max_withdrawal) {
+            return back()->with('error', 'Maximum amount to withdraw is ₦'.$setting->max_withdrawal);
         }
         DB::transaction(function () use ($user, $actual_amount, $after_fee_amount, $bank_user_id) {
             $user->update(['ngn_wallet' => $user->ngn_wallet - $actual_amount]);
@@ -253,6 +256,9 @@ class UserController extends Controller
             'old_pin' => ['required', 'string'],
             'new_pin' => ['required', 'confirmed'],
         ]);
+        if($request->new_pin == '000000') {
+            return back()->with('warning', 'Your new pin cannot be "000000"');
+        }
         try {
             $user = $request->user();
             $old_pin = $user->pin;

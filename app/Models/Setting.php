@@ -22,6 +22,8 @@ class Setting extends Model
         'favicon',
         'logo',
         'withdraw_fee',
+        'min_withdrawal',
+        'max_withdrawal',
     ];
 
     public function getLogoPath()

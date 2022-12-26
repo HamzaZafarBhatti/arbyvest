@@ -75,7 +75,7 @@
                             <input type="text" name="pin"
                                 class="form-control @if ($errors->get('pin')) is-invalid @endif"
                                 aria-describedby="pin">
-                            <a href="{{ route('user.change_pin') }}">Please setup/change your Pin</a>
+                            @include('user.partials.change_pin')
                             @if ($errors->get('pin'))
                                 <div class="invalid-feedback">
                                     @foreach ((array) $errors->get('pin')[0] as $message)

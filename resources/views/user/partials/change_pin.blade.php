@@ -1,0 +1,1 @@
+<a href="{{ route('user.change_pin') }}">Please setup/change your Pin</a>

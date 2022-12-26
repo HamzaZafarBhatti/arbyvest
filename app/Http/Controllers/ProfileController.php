@@ -74,6 +74,9 @@ class ProfileController extends Controller
     {
         $banks = Bank::where('is_active', 1)->get();
         $user_bank = BankUser::where('user_id', auth()->user()->id)->first();
+        if($user_bank) {
+            return Redirect::route('user.edit_bank_details', $user_bank->id);
+        }
         return view('user.profile.bank_details', [
             'banks' => $banks,
             'user_bank' => $user_bank,
