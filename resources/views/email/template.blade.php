@@ -7,7 +7,7 @@
                 <td style="padding: 0; width: 600px;"><br />
                     <div class="header__logo emb-logo-margin-box"
                         style="font-size: 26px; line-height: 32px; color: #c3ced9; font-family: Roboto,Tahoma,sans-serif; margin: 6px 20px 20px 20px;">
-                        <img src="{{ url('/') }}/asset/frontend/img/VIEWPOINT1-min.png" alt="logo" height="63" width="246">
+                        <img src="{{ asset('asset/images/'.$set->logo) }}" alt="logo" height="63" width="246">
                     </div>
                 </td>
             </tr>
@@ -33,7 +33,7 @@
                     <div style="margin-left: 20px; margin-right: 20px; margin-bottom: 24px;"><br />
                         <p class="size-14"
                             style="margin-top: 0; margin-bottom: 0; font-size: 14px; line-height: 21px;">
-                            Thanks,<br /><strong>Viewpoint</strong></p>
+                            Thanks,<br /><strong>Arbyvest</strong></p>
                     </div>
                 </td>
             </tr>

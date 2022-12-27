@@ -69,7 +69,7 @@ class WithdrawController extends Controller
             // if ($set->email_notify == 1) {
             //     $temp = Etemplate::first();
             // }          
-            Mail::to($user->email)->send(new GeneralEmail($user->username, 'Withdrawal request of ₦' . substr($data->amount, 0, 9) . ' has been approved<br>Thanks for working with us.', 'Withdraw Request has been approved', 1));
+            Mail::to($user->email)->send(new GeneralEmail($user->name, 'Withdrawal request of ₦' . substr($data->amount, 0, 9) . ' has been approved<br>Thanks for working with us.', 'Withdraw Request has been approved', 1));
 
             // Notification::create([
             //     'user_id' => $user->id,
@@ -160,7 +160,7 @@ class WithdrawController extends Controller
             // if ($set->email_notify == 1) {
             //     $temp = Etemplate::first();
             // }
-            Mail::to($user->email)->send(new GeneralEmail($user->username, 'Withdrawal request of ₦' . substr($data->amount, 0, 9) . ' has been declined<br>Thanks for working with us.', 'Withdraw Request has been declined'));
+            Mail::to($user->email)->send(new GeneralEmail($user->name, 'Withdrawal request of ₦' . substr($data->amount, 0, 9) . ' has been declined<br>Thanks for working with us.', 'Withdraw Request has been declined'));
             // Notification::create([
             //     'user_id' => $user->id,
             //     'title' => 'Affliate Balance WITHDRAWAL - DECLINED - NGN' . $data->amount,

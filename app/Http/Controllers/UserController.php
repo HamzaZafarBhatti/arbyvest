@@ -223,7 +223,7 @@ class UserController extends Controller
                 'amount' => $after_fee_amount,
                 'status' => 0
             ]);
-            Mail::to($user->email)->send(new GeneralEmail($user->username, 'Withdrawal request of ₦' . substr($data->amount, 0, 9) . ' is pending<br>Thanks for working with us.', 'Withdraw Request is pending'));
+            Mail::to($user->email)->send(new GeneralEmail($user->name, 'Withdrawal request of ₦' . substr($data->amount, 0, 9) . ' is pending<br>Thanks for working with us.', 'Withdraw Request is pending'));
         });
         return redirect()->route('user.withdraw')->with('success', 'Amount ₦' . number_format($actual_amount, 2) . ' Withdrawed to your Bank Account: ' . $bank_user->get_full_account);
     }

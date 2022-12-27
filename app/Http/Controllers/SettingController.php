@@ -32,25 +32,25 @@ class SettingController extends Controller
         try {
             $setting = Setting::first();
             if ($image = $request->file('logo')) {
-                $filename = 'logo_' . time() . '.jpg';
+                $filename = 'logo_' . time() . '.' . $image->getClientOriginalExtension();
                 $location =  $setting->getLogoPath() . $filename;
                 Image::make($image)->save($location);
                 $data['logo'] = $filename;
+                if($setting->logo && file_exists($setting->getLogoPath() . $setting->logo)) {
+                    unlink($setting->getLogoPath() . $setting->logo);
+                }
             }
             if ($image = $request->file('favicon')) {
-                $filename = 'favicon_' . time() . '.jpg';
+                $filename = 'favicon_' . time() . '.' . $image->getClientOriginalExtension();
                 $location =  $setting->getFaviconPath() . $filename;
                 Image::make($image)->save($location);
                 $data['favicon'] = $filename;
-            }
-            if($setting->logo) {
-                unlink($setting->getLogoPath() . $setting->logo);
-            }
-            if($setting->favicon) {
-                unlink($setting->getFaviconPath() . $setting->favicon);
+                if($setting->favicon && file_exists($setting->getFaviconPath() . $setting->favicon)) {
+                    unlink($setting->getFaviconPath() . $setting->favicon);
+                }
             }
             $setting->update($data);
-
+            cache()->forget('set');
             return redirect()->route('admin.settings.index')->with('success', 'Images updated!');
         } catch (\Throwable $th) {
             Log::error('Error: ' . $th->getMessage());
