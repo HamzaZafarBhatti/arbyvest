@@ -104,7 +104,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.users.index') }}"
-                                class="nav-link @if (Route::is('admin.users.index')) active @endif">
+                                class="nav-link @if (Route::is('admin.users.*')) active @endif">
                                 <i class="icon-user"></i>User Accounts
                             </a>
                         </li>

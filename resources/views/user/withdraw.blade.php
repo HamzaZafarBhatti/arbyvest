@@ -84,4 +84,16 @@
             </form>
         </div>
     </div>
+    <div class="card">
+        <div class="card-header">
+            <div class="header-title">
+                <h3 class="card-title pb-3">Withdraw History</h3>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-responsive">
+                
+            </table>
+        </div>
+    </div>
 @endsection

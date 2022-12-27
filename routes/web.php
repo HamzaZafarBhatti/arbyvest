@@ -84,7 +84,7 @@ Route::middleware('auth')->group(function () {
         });
         Route::controller(AdminUserController::class)->name('users.')->group(function() {
             Route::get('make-vendor/{id}', 'makeVendor')->name('make-vendor');
-            Route::post('verify_account', 'do_verify_account')->name('users.verify_account');
+            Route::post('verify_account', 'do_verify_account')->name('verify_account');
         });
         Route::controller(WithdrawController::class)->prefix('withdraws')->name('withdraws.')->group(function() {
             Route::get('/', 'index')->name('index');

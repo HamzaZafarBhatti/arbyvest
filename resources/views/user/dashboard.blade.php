@@ -22,8 +22,8 @@
                     <div class="card mb-xl-0">
                         <div class="card-body ">
                             <div class="d-flex flex-column align-items-center flex-md-row gap-3">
-                                <img src="{{asset(auth()->user()->image ? 'asset/user/images/'.auth()->user()->image : 'asset/user/images/avatars/01.png')}}"
-                                    class="img-fluid avatar avatar-90 avatar-rounded" alt="img8">
+                                <img src="{{asset(auth()->user()->image ? auth()->user()->get_user_image : 'asset/user/images/avatars/01.png')}}"
+                                    class="img-fluid avatar avatar-90 avatar-rounded" alt="img8" style="object-fit: cover">
                                 <div class="d-flex flex-column justify-content-evenly text-center text-md-start">
                                     <span class="h5">
                                         Welcome, {{ auth()->user()->name }}!
