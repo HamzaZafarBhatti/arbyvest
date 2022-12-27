@@ -7,8 +7,7 @@
                 <td style="padding: 0; width: 600px;"><br />
                     <div class="header__logo emb-logo-margin-box"
                         style="font-size: 26px; line-height: 32px; color: #c3ced9; font-family: Roboto,Tahoma,sans-serif; margin: 6px 20px 20px 20px;">
-                        <img src="{{ asset('asset/images/'.$set->logo) }}" alt="logo" height="63"
-                            width="246">
+                        <img src="{{ asset('asset/images/'.$set->logo) }}" alt="logo" width="100%">
                     </div>
                 </td>
             </tr>
