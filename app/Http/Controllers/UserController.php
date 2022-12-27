@@ -172,7 +172,9 @@ class UserController extends Controller
     public function withdraw()
     {
         $user_bank_details = BankUser::with('bank')->where('user_id', auth()->user()->id)->first();
-        return view('user.withdraw', compact('user_bank_details'));
+        $withdraws = Withdraw::where('user_id', auth()->user()->id)->get();
+        // return $withdraws;
+        return view('user.withdraw', compact('user_bank_details', 'withdraws'));
     }
 
     public function do_withdraw(Request $request)

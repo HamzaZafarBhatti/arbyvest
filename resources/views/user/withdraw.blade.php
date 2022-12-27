@@ -91,9 +91,44 @@
             </div>
         </div>
         <div class="card-body">
-            <table class="table table-responsive">
-                
-            </table>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">S/N</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Bank Account</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if ($withdraws)
+                            @foreach ($withdraws as $item)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>₦{{ $item->amount }}</td>
+                                    <td>{{ auth()->user()->bank->get_full_account }}</td>
+                                    <td>
+                                        @if ($item->status == 0)
+                                            Pending
+                                        @elseif($item->status == 1)
+                                            Approved
+                                        @else
+                                            Declined
+                                        @endif
+                                    </td>
+                                    <td>{{ date('M d, Y H:i A', strtotime($item->created_at)) }}</td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="5">No Data Found!</td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @endsection
