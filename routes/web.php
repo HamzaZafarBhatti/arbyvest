@@ -116,7 +116,11 @@ Route::middleware('auth')->group(function () {
             Route::post('change_pin', 'do_change_pin')->name('do_change_pin');
             Route::get('withdraw', 'withdraw')->name('withdraw');
             Route::post('withdraw', 'do_withdraw')->name('do_withdraw');
+            Route::get('sell_to_blackmarket', 'sell_to_blackmarket')->name('sell_to_blackmarket');
+            Route::post('sell_to_blackmarket', 'do_sell_to_blackmarket')->name('do_sell_to_blackmarket');
+            Route::post('get_amount_exchanged', 'get_amount_exchanged')->name('get_amount_exchanged');
             Route::get('upload_proof', 'upload_proof')->name('upload_proof');
+            Route::get('thankyou', 'thankyou')->name('thankyou');
         });
         Route::controller(ProfileController::class)->group(function () {
             Route::get('profile', 'edit')->name('profile.edit');

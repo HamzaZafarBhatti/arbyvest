@@ -81,6 +81,18 @@
                                     <input type="number" name="max_withdrawal" value="{{ $set->max_withdrawal }}" class="form-control">
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-lg-2">USD Black Market Counter (Hours):</label>
+                                <div class="col-lg-10">
+                                    <input type="number" name="usd_black_market_counter" value="{{ $set->usd_black_market_counter }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-lg-2">GBP Black Market Counter (Hours):</label>
+                                <div class="col-lg-10">
+                                    <input type="number" name="gbp_black_market_counter" value="{{ $set->gbp_black_market_counter }}" class="form-control">
+                                </div>
+                            </div>
                             <div class="text-right">
                                 <button type="submit" class="btn bg-dark">Submit<i
                                         class="icon-paperplane ml-2"></i></button>

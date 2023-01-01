@@ -24,6 +24,8 @@ class Setting extends Model
         'withdraw_fee',
         'min_withdrawal',
         'max_withdrawal',
+        'usd_black_market_counter',
+        'gbp_black_market_counter',
     ];
 
     public function getLogoPath()

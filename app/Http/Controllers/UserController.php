@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Mail\GeneralEmail;
 use App\Models\BankUser;
+use App\Models\BlackmarketLog;
 use App\Models\MarketPrice;
 use App\Models\Setting;
 use App\Models\TransferBalanceLog;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -179,14 +181,14 @@ class UserController extends Controller
 
     public function do_withdraw(Request $request)
     {
-        // $today = Carbon::now();
-        // $day_of_week = $today->format('l');
-        // if($day_of_week != 'Sunday') {
-        //     return back()->with('warning', 'You can request to withdraw every Sunday to your BANK Account only.');
-        // }
-        // if($today->hour < 7 || $today->hour > 10) {
-        //     return back()->with('warning', 'You can cashout your Video Earning Points from 7am to 10am.');
-        // }
+        $today = Carbon::now();
+        $day_of_week = $today->format('l');
+        if ($day_of_week != 'Sunday') {
+            return back()->with('warning', 'You can request to withdraw every Sunday to your BANK Account only.');
+        }
+        if ($today->hour < 7 || $today->hour > 10) {
+            return back()->with('warning', 'You can cashout your Video Earning Points from 7am to 10am.');
+        }
         $request->validate([
             'amount' => 'required|integer|min:10',
             'bank_user_id' => 'required',
@@ -209,13 +211,13 @@ class UserController extends Controller
         $after_fee_amount = $actual_amount - ($actual_amount * $setting->withdraw_fee / 100);
         // return $after_fee_amount;
         if ($actual_amount < $setting->min_withdrawal) {
-            return back()->with('error', 'Minimum amount to withdraw is ₦'.$setting->min_withdrawal);
+            return back()->with('error', 'Minimum amount to withdraw is ₦' . $setting->min_withdrawal);
         }
         if ($actual_amount > $user->ngn_wallet) {
             return back()->with('error', 'Your entered amount is more than your NGN balance');
         }
         if ($actual_amount > $setting->max_withdrawal) {
-            return back()->with('error', 'Maximum amount to withdraw is ₦'.$setting->max_withdrawal);
+            return back()->with('error', 'Maximum amount to withdraw is ₦' . $setting->max_withdrawal);
         }
         DB::transaction(function () use ($user, $actual_amount, $after_fee_amount, $bank_user_id) {
             $user->update(['ngn_wallet' => $user->ngn_wallet - $actual_amount]);
@@ -228,6 +230,106 @@ class UserController extends Controller
             Mail::to($user->email)->send(new GeneralEmail($user->name, 'Withdrawal request of ₦' . substr($data->amount, 0, 9) . ' is pending<br>Thanks for working with us.', 'Withdraw Request is pending'));
         });
         return redirect()->route('user.withdraw')->with('success', 'Amount ₦' . number_format($actual_amount, 2) . ' Withdrawed to your Bank Account: ' . $bank_user->get_full_account);
+    }
+
+    public function sell_to_blackmarket()
+    {
+        $blackMarketLogObj = BlackmarketLog::where('user_id', auth()->user()->id);
+        $logs = $blackMarketLogObj->get();
+        $latest_log = $blackMarketLogObj->where('status', 0)->latest('id')->first();
+        return view('user.sell_to_blackmarket', compact('logs', 'latest_log'));
+    }
+
+    public function do_sell_to_blackmarket(Request $request)
+    {
+        // return $request;
+        $today = Carbon::now();
+        $day_of_week = $today->format('l');
+        // $days_not_allowed = ['Saturday', 'Sunday'];
+        // if(in_array($day_of_week, $days_not_allowed)) {
+        //     return back()->with('warning', 'You cannot use black market on Saturday and Sunday.');
+        // }
+        $request->validate([
+            'amount_sold' => 'required|integer|min:10|max:35000',
+            'amount_exchanged' => 'required|integer',
+            'currency' => 'required',
+        ]);
+        $user = auth()->user();
+        if (!$user->is_verified) {
+            return back()->with('error', 'Your account is not verified!');
+        }
+        // if (!$user->pin) {
+        //     return back()->with('error', 'Please setup your Pin!');
+        // }
+        // if ($user->pin != $request->pin) {
+        //     return back()->with('error', 'You have entered wrong Pin!');
+        // }
+        $setting = Setting::first();
+        $currency = $request->currency;
+        $amount_sold = $request->amount_sold;
+        $ref_id = Str::random(10);
+        // return $after_fee_amount;
+        if ($currency == 'usd') {
+            if ($amount_sold > $user->usd_wallet) {
+                return back()->with('error', 'Your entered amount is more than your NGN balance');
+            } else {
+                $user_data = [
+                    'usd_wallet' => $user->usd_wallet - $amount_sold
+                ];
+                $black_market_data = [
+                    'ref_id' => $ref_id,
+                    'user_id' => $user->id,
+                    'amount_sold' => $amount_sold,
+                    'amount_exchanged' => $request->amount_exchanged,
+                    'currency' => $currency,
+                    'status' => 0,
+                    'completed_at' => Carbon::now()->addSeconds($setting->usd_black_market_counter)
+                ];
+            }
+        }
+        if ($currency == 'gbp') {
+            if ($amount_sold > $user->gbp_wallet) {
+                return back()->with('error', 'Your entered amount is more than your NGN balance');
+            } else {
+                $user_data = [
+                    'gbp_wallet' => $user->gbp_wallet - $amount_sold
+                ];
+                $black_market_data = [
+                    'ref_id' => $ref_id,
+                    'user_id' => $user->id,
+                    'amount_sold' => $amount_sold,
+                    'amount_exchanged' => $request->amount_exchanged,
+                    'currency' => $currency,
+                    'status' => 0,
+                    'completed_at' => Carbon::now()->addSeconds($setting->usd_black_market_counter)
+                ];
+            }
+        }
+        // return $black_market_data;
+        try {
+            DB::transaction(function () use ($user, $user_data, $black_market_data) {
+                $user->update($user_data);
+                $black_market_log = BlackmarketLog::create($black_market_data);
+                Mail::to($user->email)->send(new GeneralEmail($user->name, 'Black Market Sell request of ' . $black_market_log->get_amount_sold . ' is pending<br>Thanks for working with us.', 'Black Market Sell Request is pending', 1));
+            });
+            return redirect()->route('user.sell_to_blackmarket')->with('success', 'Black Market Sell request is placed.');
+        } catch (Throwable $th) {
+            Log::error($th->getMessage());
+            return back()->with('error', 'Something went wrong!');
+        }
+    }
+
+    public function get_amount_exchanged(Request $request)
+    {
+        $market_price = MarketPrice::query();
+        if ($request->currency == 'usd') {
+            $market_price = $market_price->where('symbol', '$');
+        } else {
+            $market_price = $market_price->where('symbol', '£');
+        }
+        $market_price = $market_price->first();
+        $amount_exchanged = $market_price->black_market_rate * $request->amountSold;
+        return $amount_exchanged;
     }
 
     public function verify_trader()
@@ -258,7 +360,7 @@ class UserController extends Controller
             'old_pin' => ['required', 'string'],
             'new_pin' => ['required', 'confirmed'],
         ]);
-        if($request->new_pin == '000000') {
+        if ($request->new_pin == '000000') {
             return back()->with('warning', 'Your new pin cannot be "000000"');
         }
         try {
@@ -275,6 +377,11 @@ class UserController extends Controller
             Log::error($th->getMessage());
             return back()->with('error', 'Something went wrong!');
         }
+    }
+
+    public function thankyou()
+    {
+        return view('user.thankyou');
     }
 
     public function logout(Request $request)
