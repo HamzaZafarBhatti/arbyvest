@@ -22,8 +22,9 @@
                     <div class="card mb-xl-0">
                         <div class="card-body ">
                             <div class="d-flex flex-column align-items-center flex-md-row gap-3">
-                                <img src="{{asset(auth()->user()->image ? auth()->user()->get_user_image : 'asset/user/images/avatars/01.png')}}"
-                                    class="img-fluid avatar avatar-90 avatar-rounded" alt="img8" style="object-fit: cover">
+                                <img src="{{ asset(auth()->user()->image ? auth()->user()->get_user_image : 'asset/user/images/avatars/01.png') }}"
+                                    class="img-fluid avatar avatar-90 avatar-rounded" alt="img8"
+                                    style="object-fit: cover">
                                 <div class="d-flex flex-column justify-content-evenly text-center text-md-start">
                                     <span class="h5">
                                         Welcome, {{ auth()->user()->name }}!
@@ -32,7 +33,7 @@
                                         Account ID: <span class="text-uppercase">{{ auth()->user()->account_id }}</span>
                                     </span>
                                     <span class="text-white">
-                                        Account Verification Status: 
+                                        Account Verification Status:
                                         @if (auth()->user()->is_verified)
                                             <span class="text-uppercase text-success">verified</span>
                                         @else
@@ -62,7 +63,8 @@
                                     <small><a href="#">wallet</a></small>
                                     <div class="pt-2">
                                         <h4 style="visibility: visible;">USD Balance</h4>
-                                        <h4 class="counter" style="visibility: visible;">{{ auth()->user()->getUsdWallet }}</h4>
+                                        <h4 class="counter" style="visibility: visible;">{{ auth()->user()->getUsdWallet }}
+                                        </h4>
                                     </div>
                                     <div class="pt-2">
                                         <a href="#" class="btn btn-primary w-100" type="button">
@@ -87,7 +89,8 @@
                                     <small><a href="#">wallet</a></small>
                                     <div class="pt-2">
                                         <h4 style="visibility: visible;">GBP Balance</h4>
-                                        <h4 class="counter" style="visibility: visible;">{{ auth()->user()->getGbpWallet }}</h4>
+                                        <h4 class="counter" style="visibility: visible;">{{ auth()->user()->getGbpWallet }}
+                                        </h4>
                                     </div>
                                     <div class="pt-2">
                                         <a href="#" class="btn btn-primary w-100" type="button">
@@ -112,7 +115,8 @@
                                     <small><a href="#">wallet</a></small>
                                     <div class="pt-2">
                                         <h4 style="visibility: visible;">NGN Balance</h4>
-                                        <h4 class="counter" style="visibility: visible;">{{ auth()->user()->getNgnWallet }}</h4>
+                                        <h4 class="counter" style="visibility: visible;">{{ auth()->user()->getNgnWallet }}
+                                        </h4>
                                     </div>
                                     <div class="pt-2">
                                         <a href="#" class="btn btn-primary w-100" type="button">
@@ -185,4 +189,8 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script src="{{ asset('asset/user/js/blackmarket.js') }}"></script>
 @endsection

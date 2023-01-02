@@ -301,7 +301,8 @@ class UserController extends Controller
                     'amount_exchanged' => $request->amount_exchanged,
                     'currency' => $currency,
                     'status' => 0,
-                    'completed_at' => Carbon::now()->addSeconds($setting->usd_black_market_counter)
+                    // 'completed_at' => Carbon::now()->addSeconds($setting->usd_black_market_counter)
+                    'completed_at' => Carbon::now()->addHours($setting->usd_black_market_counter)
                 ];
             }
         }
