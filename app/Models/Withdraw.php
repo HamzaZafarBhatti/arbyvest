@@ -30,7 +30,25 @@ class Withdraw extends Model
     protected function getAmount(): Attribute
     {
         return Attribute::make(
-            get: fn($val, $attr) => '₦ '.number_format($attr['amount'],2)
+            get: fn ($val, $attr) => '₦' . number_format($attr['amount'], 2)
+        );
+    }
+
+    protected function getStatus(): Attribute
+    {
+        return Attribute::make(
+            get: function ($val, $attr) {
+                switch ($attr['status']):
+                    case 0:
+                        return 'Pending';
+                    case 1:
+                        return 'Successful';
+                    case 2:
+                        return 'Declined';
+                    default:
+                        return 'Unknown';
+                endswitch;
+            }
         );
     }
 }

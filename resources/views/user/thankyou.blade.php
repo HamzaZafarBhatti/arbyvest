@@ -1,7 +1,5 @@
 @extends('user.layout.app')
 @section('title', 'Thank you')
-@section('css')
-@endsection
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -25,8 +23,5 @@
                 </div>
             </div>
         </div>
-    @endsection
-    @section('script')
-        <!-- dashboard init -->
-        {{-- <script src="{{ URL::asset('/user_assets/js/app.min.js') }}"></script> --}}
-    @endsection
+    </div>
+@endsection

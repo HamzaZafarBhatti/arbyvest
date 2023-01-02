@@ -78,7 +78,12 @@ class UserController extends Controller
 
     public function dashboard()
     {
-        return view('user.dashboard');
+        $user_account_id = auth()->user()->account_id;
+        $user_id = auth()->user()->id;
+        $transfer_logs = TransferBalanceLog::with('vendor', 'user')->where('vendor_account_id', $user_account_id)->orWhere('user_account_id', $user_account_id)->latest()->take(5)->get();
+        $blackmarket_logs = BlackmarketLog::where('user_id', $user_id)->where('status', 1)->latest()->take(5)->get();
+        $withdraws = Withdraw::where('user_id', $user_id)->latest()->take(5)->get();
+        return view('user.dashboard', compact('transfer_logs', 'user_account_id', 'blackmarket_logs', 'withdraws'));
     }
 
     public function market_rates()
@@ -253,17 +258,18 @@ class UserController extends Controller
             'amount_sold' => 'required|integer|min:10|max:35000',
             'amount_exchanged' => 'required|integer',
             'currency' => 'required',
+            'pin' => 'required',
         ]);
         $user = auth()->user();
         if (!$user->is_verified) {
             return back()->with('error', 'Your account is not verified!');
         }
-        // if (!$user->pin) {
-        //     return back()->with('error', 'Please setup your Pin!');
-        // }
-        // if ($user->pin != $request->pin) {
-        //     return back()->with('error', 'You have entered wrong Pin!');
-        // }
+        if (!$user->pin) {
+            return back()->with('error', 'Please setup your Pin!');
+        }
+        if ($user->pin != $request->pin) {
+            return back()->with('error', 'You have entered wrong Pin!');
+        }
         $setting = Setting::first();
         $currency = $request->currency;
         $amount_sold = $request->amount_sold;
@@ -283,7 +289,8 @@ class UserController extends Controller
                     'amount_exchanged' => $request->amount_exchanged,
                     'currency' => $currency,
                     'status' => 0,
-                    'completed_at' => Carbon::now()->addSeconds($setting->usd_black_market_counter)
+                    // 'completed_at' => Carbon::now()->addSeconds($setting->usd_black_market_counter)
+                    'completed_at' => Carbon::now()->addHours($setting->usd_black_market_counter)
                 ];
             }
         }
@@ -301,8 +308,8 @@ class UserController extends Controller
                     'amount_exchanged' => $request->amount_exchanged,
                     'currency' => $currency,
                     'status' => 0,
-                    // 'completed_at' => Carbon::now()->addSeconds($setting->usd_black_market_counter)
-                    'completed_at' => Carbon::now()->addHours($setting->usd_black_market_counter)
+                    // 'completed_at' => Carbon::now()->addSeconds($setting->gbp_black_market_counter)
+                    'completed_at' => Carbon::now()->addHours($setting->gbp_black_market_counter)
                 ];
             }
         }

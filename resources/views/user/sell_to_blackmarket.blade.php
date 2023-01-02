@@ -1,6 +1,6 @@
 @extends('user.layout.app')
 
-@section('title', 'Withdraw')
+@section('title', 'Sell to Black Market')
 
 @section('css')
     <style>
