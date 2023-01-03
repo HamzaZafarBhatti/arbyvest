@@ -14,7 +14,7 @@
             @csrf
             <div class="pt-3">
                 <div class="row align-items-center">
-                    <div class="col-md-4 col-12">
+                    <div class="col-xl-5 col-12">
                         <h3 class="text-warning">YOU SELL</h3>
                         <div class="input-group mb-3">
                             <input type="number" step=".01" min="0.00" class="form-control @if ($errors->get('amount_sold')) is-invalid @endif" placeholder="0.00"
@@ -41,8 +41,8 @@
                             @endif
                         </div>
                     </div>
-                    <div class="col-md-4 text-center d-none d-md-block">
-                        <svg width="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <div class="col-xl-2 text-center d-none d-xl-block">
+                        <svg id="svg_arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
                                 d="M21.25 16.334V7.665C21.25 4.645 19.111 2.75 16.084 2.75H7.916C4.889 2.75 2.75 4.635 2.75 7.665L2.75 16.334C2.75 19.364 4.889 21.25 7.916 21.25H16.084C19.111 21.25 21.25 19.364 21.25 16.334Z"
                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -53,7 +53,7 @@
                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                         </svg>
                     </div>
-                    <div class="col-md-4 col-12">
+                    <div class="col-xl-5 col-12">
                         <h3 class="text-warning">YOU RECEIVE</h3>
                         <div class="input-group mb-3">
                             <input type="number" step=".01" min="0.00" class="form-control @if ($errors->get('amount_exchanged')) is-invalid @endif" placeholder="0.00"

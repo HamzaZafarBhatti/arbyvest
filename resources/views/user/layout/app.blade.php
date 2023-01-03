@@ -10,6 +10,12 @@
     <link rel="shortcut icon" href="{{ asset('asset/images/' . $set->favicon) }}" />
     <link rel="stylesheet" href="{{ asset('asset/user/css/libs.min.css') }}">
     <link rel="stylesheet" href="{{ asset('asset/user/css/coinex.css?v=1.0.0') }}">
+    <style>
+        #svg_arrow {
+            max-width: 100px;
+            width: 100%;
+        }
+    </style>
     @yield('css')
 </head>
 
