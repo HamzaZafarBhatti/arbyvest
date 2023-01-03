@@ -23,6 +23,17 @@ class AdminUserController extends Controller
         return view('admin.users.index', compact('records'));
     }
 
+    public function kyc_index()
+    {
+        //
+        $roleIds = config('app.userVendorRoleIds');
+        $roleIds = explode(',', $roleIds);
+        $records = User::whereHas("roles", function($q) use ($roleIds) {
+            $q->whereIn("id", $roleIds);
+        })->where('is_verified', 0)->latest('id')->get();
+        return view('admin.users.kyc_index', compact('records'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -72,6 +83,20 @@ class AdminUserController extends Controller
             $ext = null;
         }
         return view('admin.users.edit', compact('user', 'ext', 'user_document_url'));
+    }
+
+    public function kyc_info($id)
+    {
+        //
+        $user = User::find($id);
+        $user_document_url = asset($user->get_user_document);
+        $ext = pathinfo($user_document_url);
+        if(isset($ext['extension'])) {
+            $ext = $ext['extension'];
+        } else {
+            $ext = null;
+        }
+        return view('admin.users.kyc_info', compact('user', 'ext', 'user_document_url'));
     }
 
     /**

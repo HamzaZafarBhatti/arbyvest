@@ -104,8 +104,14 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.users.index') }}"
-                                class="nav-link @if (Route::is('admin.users.*')) active @endif">
+                                class="nav-link @if (Route::is(['admin.users.index', 'admin.users.edit'])) active @endif">
                                 <i class="icon-user"></i>User Accounts
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.users.kyc_index') }}"
+                                class="nav-link @if (Route::is(['admin.users.kyc_index', 'admin.users.kyc_info'])) active @endif">
+                                <i class="icon-user"></i>User KYC Requests
                             </a>
                         </li>
                     </ul>
