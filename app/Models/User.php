@@ -71,6 +71,16 @@ class User extends Authenticatable
         return $this->hasOne(BankUser::class);
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id', 'id');
+    }
+
     protected function getUsdWallet(): Attribute
     {
         return Attribute::make(

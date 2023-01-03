@@ -121,6 +121,7 @@ Route::middleware('auth')->group(function () {
             Route::post('get_amount_exchanged', 'get_amount_exchanged')->name('get_amount_exchanged');
             Route::get('upload_proof', 'upload_proof')->name('upload_proof');
             Route::get('thankyou', 'thankyou')->name('thankyou');
+            Route::get('referral', 'referral')->name('referral');
         });
         Route::controller(ProfileController::class)->group(function () {
             Route::get('profile', 'edit')->name('profile.edit');

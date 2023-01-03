@@ -54,6 +54,14 @@ class UserController extends Controller
             'phone' => ['required', 'max:50'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+        $parent_id = null;
+        if($request->has('referral')) {
+            $request->validate([
+                'referral' => ['required', 'string']
+            ]);
+            $referral_user = User::where('username', $request->referral)->first();
+            $parent_id = $referral_user->id;
+        }
 
         $bytes = random_bytes(5);
         $account_id = bin2hex($bytes);
@@ -67,6 +75,7 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
+            'parent_id' => $parent_id,
         ]);
 
         $user->assignRole('User');
@@ -390,6 +399,12 @@ class UserController extends Controller
     public function thankyou()
     {
         return view('user.thankyou');
+    }
+
+    public function referral()
+    {
+        $downlines = User::where('parent_id', auth()->user()->id)->get();
+        return view('user.referrals', compact('downlines'));
     }
 
     public function logout(Request $request)
