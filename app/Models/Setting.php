@@ -26,6 +26,8 @@ class Setting extends Model
         'max_withdrawal',
         'usd_black_market_counter',
         'gbp_black_market_counter',
+        'usd_referral_bonus',
+        'gbp_referral_bonus',
     ];
 
     public function getLogoPath()

@@ -19,9 +19,9 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    const USD_SYMBOL = '$';
-    const GBP_SYMBOL = '£';
-    const NGN_SYMBOL = '₦';
+    // const USD_SYMBOL = '$';
+    // const GBP_SYMBOL = '£';
+    // const NGN_SYMBOL = '₦';
     
     protected $photo_path = 'asset/images/';
 
@@ -66,6 +66,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // protected $with = ['bank'];
+
     public function bank()
     {
         return $this->hasOne(BankUser::class);
@@ -79,6 +81,16 @@ class User extends Authenticatable
     public function children()
     {
         return $this->hasMany(self::class, 'parent_id', 'id');
+    }
+
+    public function upline_referral_log()
+    {
+        return $this->hasMany(ReferralLog::class, 'upline_id');
+    }
+
+    public function downline_referral_log()
+    {
+        return $this->hasOne(ReferralLog::class, 'downline_id');
     }
 
     protected function getUsdWallet(): Attribute

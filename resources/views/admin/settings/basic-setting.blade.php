@@ -93,6 +93,18 @@
                                     <input type="number" name="gbp_black_market_counter" value="{{ $set->gbp_black_market_counter }}" class="form-control">
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-lg-2">Referral Bonus for USD (%):</label>
+                                <div class="col-lg-10">
+                                    <input type="number" name="usd_referral_bonus" value="{{ $set->usd_referral_bonus }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-lg-2">Referral Bonus for GBP (%):</label>
+                                <div class="col-lg-10">
+                                    <input type="number" name="gbp_referral_bonus" value="{{ $set->gbp_referral_bonus }}" class="form-control">
+                                </div>
+                            </div>
                             <div class="text-right">
                                 <button type="submit" class="btn bg-dark">Submit<i
                                         class="icon-paperplane ml-2"></i></button>

@@ -22,6 +22,7 @@
                                     <th scope="col">S/N</th>
                                     <th scope="col">Downline Username</th>
                                     <th scope="col">Email</th>
+                                    <th scope="col">Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -31,6 +32,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $item->username }}</td>
                                             <td>{{ $item->email }}</td>
+                                            <td>{{ $item->downline_referral_log->get_amount }}</td>
                                         </tr>
                                     @endforeach
                                 @else

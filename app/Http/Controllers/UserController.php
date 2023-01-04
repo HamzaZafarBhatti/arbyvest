@@ -7,6 +7,7 @@ use App\Mail\GeneralEmail;
 use App\Models\BankUser;
 use App\Models\BlackmarketLog;
 use App\Models\MarketPrice;
+use App\Models\ReferralLog;
 use App\Models\Setting;
 use App\Models\TransferBalanceLog;
 use App\Models\User;
@@ -127,7 +128,7 @@ class UserController extends Controller
         if ($user->pin != $request->pin) {
             return back()->with('error', 'You have entered wrong Pin!');
         }
-        $customer = User::where('account_id', $request->account_id)->first();
+        $customer = User::with('parent')->where('account_id', $request->account_id)->first();
         if (!$user->hasRole('Vendor')) {
             return back()->with('error', 'You do not have authority to transfer!');
         }
@@ -140,7 +141,7 @@ class UserController extends Controller
         if ($user->account_id == $request->account_id) {
             return back()->with('error', 'You cannot transfer balance to yourself!');
         }
-
+        $setting = Setting::first();
         if ($request->currency == 'usd') {
             if ($request->amount < 10) {
                 return back()->with('error', 'Minimum amount to transfer is $10');
@@ -155,9 +156,21 @@ class UserController extends Controller
             $logdata['user_account_id'] = $request->account_id;
             $user_usd_wallet = $user->usd_wallet - $request->amount;
             $customer_usd_wallet = $customer->usd_wallet + $request->amount;
-            DB::transaction(function () use ($user_usd_wallet, $customer_usd_wallet, $logdata, $user, $customer) {
+            DB::transaction(function () use ($user_usd_wallet, $customer_usd_wallet, $logdata, $user, $customer, $setting) {
                 $user->update(['usd_wallet' => $user_usd_wallet]);
                 $customer->update(['usd_wallet' => $customer_usd_wallet]);
+                if(!empty($customer->parent)) {
+                    ReferralLog::firstOrCreate(
+                        ['upline_id' => $customer->parent->id, 'downline_id' => $customer->id],
+                        ['currency' => $logdata['currency'], 'amount' => $logdata['amount'] * $setting->usd_referral_bonus / 100, 'type' => 1]
+                    );
+                    // ReferralLog::firstOrCreate([
+                    //     'upline_id' => $customer->parent->id,
+                    //     'downline_id' => $customer->id,
+                    //     'currency' => $request->currency,
+                    //     'amount' => $logdata['amount'] * $setting->usd_referral_bonus / 100
+                    // ]);
+                }
                 TransferBalanceLog::create($logdata);
             });
             $amount = '$ ' . $request->amount;
@@ -175,9 +188,21 @@ class UserController extends Controller
             $logdata['user_account_id'] = $request->account_id;
             $user_gbp_wallet = $user->gbp_wallet - $request->amount;
             $customer_gbp_wallet = $customer->gbp_wallet + $request->amount;
-            DB::transaction(function () use ($user_gbp_wallet, $customer_gbp_wallet, $logdata, $user, $customer) {
+            DB::transaction(function () use ($user_gbp_wallet, $customer_gbp_wallet, $logdata, $user, $customer, $setting) {
                 $user->update(['gbp_wallet' => $user_gbp_wallet]);
                 $customer->update(['gbp_wallet' => $customer_gbp_wallet]);
+                if(!empty($customer->parent)) {
+                    ReferralLog::firstOrCreate(
+                        ['upline_id' => $customer->parent->id, 'downline_id' => $customer->id],
+                        ['currency' => $logdata['currency'], 'amount' => $logdata['amount'] * $setting->gbp_referral_bonus / 100, 'type' => 1]
+                    );
+                    // ReferralLog::firstOrCreate([
+                    //     'upline_id' => $customer->parent->id,
+                    //     'downline_id' => $customer->id,
+                    //     'currency' => $request->currency,
+                    //     'amount' => $logdata['amount'] * $setting->gbp_referral_bonus / 100
+                    // ]);
+                }
                 TransferBalanceLog::create($logdata);
             });
             $amount = '£ ' . $request->amount;
@@ -403,7 +428,8 @@ class UserController extends Controller
 
     public function referral()
     {
-        $downlines = User::where('parent_id', auth()->user()->id)->get();
+        $downlines = User::select('id', 'username', 'email')->withOnly('downline_referral_log')->where('parent_id', auth()->user()->id)->get();
+        // return $downlines;
         return view('user.referrals', compact('downlines'));
     }
 
