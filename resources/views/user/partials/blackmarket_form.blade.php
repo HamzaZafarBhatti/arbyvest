@@ -58,7 +58,7 @@
                         <div class="input-group mb-3">
                             <input type="number" step=".01" min="0.00" class="form-control @if ($errors->get('amount_exchanged')) is-invalid @endif" placeholder="0.00"
                                 name="amount_exchanged" id="amount_exchanged" aria-label="0.00"
-                                aria-describedby="receive">
+                                aria-describedby="receive" readonly>
                             <span class="input-group-text p-3" id="receive">
                                 NGN
                             </span>
