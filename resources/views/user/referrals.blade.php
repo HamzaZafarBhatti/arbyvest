@@ -25,7 +25,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($downlines)
+                                @if (count($downlines) > 0)
                                     @foreach ($downlines as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
