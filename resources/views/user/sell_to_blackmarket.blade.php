@@ -80,6 +80,13 @@
                             <div class="deadline">
                                 <div class="deadline-format">
                                     <div>
+                                        <h4 class="days"></h4>
+                                        <span>days</span>
+                                    </div>
+                                </div>
+                                <span>:</span>
+                                <div class="deadline-format">
+                                    <div>
                                         <h4 class="hours"></h4>
                                         <span>hours</span>
                                     </div>
@@ -189,12 +196,13 @@
                 const oneDay = 24 * 60 * 60 * 1000;
                 const oneHour = 60 * 60 * 1000;
                 const oneMinute = 60 * 1000;
-
+                
+                let days = Math.floor(t / oneDay);
                 let hours = Math.floor((t % oneDay) / oneHour);
                 let minutes = Math.floor((t % oneHour) / oneMinute);
                 let seconds = Math.floor((t % oneMinute) / 1000);
 
-                const values = [hours, minutes, seconds];
+                const values = [days, hours, minutes, seconds];
 
                 function format(value) {
                     if (value < 10) {
@@ -211,7 +219,6 @@
                     clearInterval(countdown);
                     $('.deadline').addClass('d-none');
                     $('.deadline-heading').addClass('d-none')
-                    $('.extraction-gif').next().empty().html('Completing Extraction... WAIT!')
                     now = new Date();
                     if (futureDateUTC < now) {
                             window.location.href = "{{ route('user.thankyou') }}"
