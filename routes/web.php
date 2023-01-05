@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\FrontController;
@@ -104,37 +107,57 @@ Route::middleware('auth')->group(function () {
         Route::resource('document_types', DocumentTypeController::class)->except('create', 'show');
     });
     // User
+    Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
+                ->name('verification.notice');
+
+    Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+                ->middleware(['signed', 'throttle:6,1'])
+                ->name('verification.verify');
+
+    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+                ->middleware('throttle:6,1')
+                ->name('verification.send');
+
+    // Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
+    //             ->name('password.confirm');
+
+    // Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
+
+    // Route::put('password', [PasswordController::class, 'update'])->name('password.update');
+
     Route::middleware('user')->prefix('app')->name('user.')->group(function () {
-        Route::controller(UserController::class)->group(function () {
-            Route::get('/logout', 'logout')->name('logout');
-            Route::get('dashboard', 'dashboard')->name('dashboard');
-            Route::get('market_rates', 'market_rates')->name('market_rates');
-            Route::get('fund_wallet', 'fund_wallet')->name('fund_wallet');
-            Route::get('verify_trader', 'verify_trader')->name('trader.verify');
-            Route::post('verify_trader', 'do_verify_trader')->name('trader.do_verify');
-            Route::get('transfer_balance', 'transfer_balance')->name('transfer_balance');
-            Route::post('transfer_balance', 'do_transfer_balance')->name('do_transfer_balance');
-            Route::get('change_pin', 'change_pin')->name('change_pin');
-            Route::post('change_pin', 'do_change_pin')->name('do_change_pin');
-            Route::get('withdraw', 'withdraw')->name('withdraw');
-            Route::post('withdraw', 'do_withdraw')->name('do_withdraw');
-            Route::get('sell_to_blackmarket', 'sell_to_blackmarket')->name('sell_to_blackmarket');
-            Route::post('sell_to_blackmarket', 'do_sell_to_blackmarket')->name('do_sell_to_blackmarket');
-            Route::post('get_amount_exchanged', 'get_amount_exchanged')->name('get_amount_exchanged');
-            Route::get('upload_proof', 'upload_proof')->name('upload_proof');
-            Route::get('thankyou', 'thankyou')->name('thankyou');
-            Route::get('referral', 'referral')->name('referral');
-        });
-        Route::controller(ProfileController::class)->group(function () {
-            Route::get('profile', 'edit')->name('profile.edit');
-            Route::patch('profile', 'update')->name('profile.update');
-            Route::get('bank_details', 'create_bank_details')->name('create_bank_details');
-            Route::get('bank_details/{id}', 'edit_bank_details')->name('edit_bank_details');
-            Route::post('bank_details', 'store_bank_details')->name('store_bank_details');
-            Route::patch('bank_details/{id}', 'update_bank_details')->name('update_bank_details');
-            Route::middleware('is_not_verified')->group(function () {
-                Route::get('verify_account', 'verify_account')->name('verify_account');
-                Route::post('verify_account', 'do_verify_account')->name('do_verify_account');
+        Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+        Route::middleware('verified')->group(function() {
+            Route::controller(UserController::class)->group(function () {
+                Route::get('dashboard', 'dashboard')->name('dashboard');
+                Route::get('market_rates', 'market_rates')->name('market_rates');
+                Route::get('fund_wallet', 'fund_wallet')->name('fund_wallet');
+                Route::get('verify_trader', 'verify_trader')->name('trader.verify');
+                Route::post('verify_trader', 'do_verify_trader')->name('trader.do_verify');
+                Route::get('transfer_balance', 'transfer_balance')->name('transfer_balance');
+                Route::post('transfer_balance', 'do_transfer_balance')->name('do_transfer_balance');
+                Route::get('change_pin', 'change_pin')->name('change_pin');
+                Route::post('change_pin', 'do_change_pin')->name('do_change_pin');
+                Route::get('withdraw', 'withdraw')->name('withdraw');
+                Route::post('withdraw', 'do_withdraw')->name('do_withdraw');
+                Route::get('sell_to_blackmarket', 'sell_to_blackmarket')->name('sell_to_blackmarket');
+                Route::post('sell_to_blackmarket', 'do_sell_to_blackmarket')->name('do_sell_to_blackmarket');
+                Route::post('get_amount_exchanged', 'get_amount_exchanged')->name('get_amount_exchanged');
+                Route::get('upload_proof', 'upload_proof')->name('upload_proof');
+                Route::get('thankyou', 'thankyou')->name('thankyou');
+                Route::get('referral', 'referral')->name('referral');
+            });
+            Route::controller(ProfileController::class)->group(function () {
+                Route::get('profile', 'edit')->name('profile.edit');
+                Route::patch('profile', 'update')->name('profile.update');
+                Route::get('bank_details', 'create_bank_details')->name('create_bank_details');
+                Route::get('bank_details/{id}', 'edit_bank_details')->name('edit_bank_details');
+                Route::post('bank_details', 'store_bank_details')->name('store_bank_details');
+                Route::patch('bank_details/{id}', 'update_bank_details')->name('update_bank_details');
+                Route::middleware('is_not_verified')->group(function () {
+                    Route::get('verify_account', 'verify_account')->name('verify_account');
+                    Route::post('verify_account', 'do_verify_account')->name('do_verify_account');
+                });
             });
         });
     });

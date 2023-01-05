@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Auth\Events\Registered;
 use Throwable;
 
 class UserController extends Controller
@@ -74,12 +75,13 @@ class UserController extends Controller
             'phone' => $request->phone,
             'account_id' => $account_id,
             'password' => bcrypt($request->password),
-            'email_verified_at' => now(),
             'remember_token' => Str::random(10),
             'parent_id' => $parent_id,
         ]);
 
         $user->assignRole('User');
+
+        event(new Registered($user));
 
         Auth::login($user);
 
@@ -104,8 +106,7 @@ class UserController extends Controller
 
     public function fund_wallet()
     {
-        // $market_prices = MarketPrice::whereIsActive(1)->get();
-        return view('user.fund_wallet'/* , compact('market_prices') */);
+        return view('user.fund_wallet');
     }
 
     public function transfer_balance()
@@ -164,12 +165,6 @@ class UserController extends Controller
                         ['upline_id' => $customer->parent->id, 'downline_id' => $customer->id],
                         ['currency' => $logdata['currency'], 'amount' => $logdata['amount'] * $setting->usd_referral_bonus / 100, 'type' => 1]
                     );
-                    // ReferralLog::firstOrCreate([
-                    //     'upline_id' => $customer->parent->id,
-                    //     'downline_id' => $customer->id,
-                    //     'currency' => $request->currency,
-                    //     'amount' => $logdata['amount'] * $setting->usd_referral_bonus / 100
-                    // ]);
                 }
                 TransferBalanceLog::create($logdata);
             });
@@ -196,12 +191,6 @@ class UserController extends Controller
                         ['upline_id' => $customer->parent->id, 'downline_id' => $customer->id],
                         ['currency' => $logdata['currency'], 'amount' => $logdata['amount'] * $setting->gbp_referral_bonus / 100, 'type' => 1]
                     );
-                    // ReferralLog::firstOrCreate([
-                    //     'upline_id' => $customer->parent->id,
-                    //     'downline_id' => $customer->id,
-                    //     'currency' => $request->currency,
-                    //     'amount' => $logdata['amount'] * $setting->gbp_referral_bonus / 100
-                    // ]);
                 }
                 TransferBalanceLog::create($logdata);
             });
