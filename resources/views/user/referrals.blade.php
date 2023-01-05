@@ -32,7 +32,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $item->username }}</td>
                                             <td>{{ $item->email }}</td>
-                                            <td>{{ $item->downline_referral_log->get_amount }}</td>
+                                            <td>{{ $item->downline_referral_log->get_amount ?? 'No Transfer has been done!' }}</td>
                                         </tr>
                                     @endforeach
                                 @else
