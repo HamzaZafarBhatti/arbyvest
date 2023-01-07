@@ -154,7 +154,7 @@ class UserController extends Controller
             $logdata['vendor_account_id'] = $user->account_id;
             $logdata['currency'] = $request->currency;
             $logdata['amount'] = $request->amount;
-            $logdata['user_account_id'] = $request->account_id;
+            $logdata['user_account_id'] = strtolower($request->account_id);
             $user_usd_wallet = $user->usd_wallet - $request->amount;
             $customer_usd_wallet = $customer->usd_wallet + $request->amount;
             DB::transaction(function () use ($user_usd_wallet, $customer_usd_wallet, $logdata, $user, $customer, $setting) {
@@ -180,7 +180,7 @@ class UserController extends Controller
             $logdata['vendor_account_id'] = $user->account_id;
             $logdata['currency'] = $request->currency;
             $logdata['amount'] = $request->amount;
-            $logdata['user_account_id'] = $request->account_id;
+            $logdata['user_account_id'] = strtolower($request->account_id);
             $user_gbp_wallet = $user->gbp_wallet - $request->amount;
             $customer_gbp_wallet = $customer->gbp_wallet + $request->amount;
             DB::transaction(function () use ($user_gbp_wallet, $customer_gbp_wallet, $logdata, $user, $customer, $setting) {
