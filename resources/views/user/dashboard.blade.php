@@ -151,7 +151,7 @@
                                             <h6
                                                 class="mb-2 {{ $item->vendor_account_id == $user_account_id ? 'text-danger' : 'text-success' }}">
                                                 {{ $item->get_amount }} Transfer
-                                                {{ ($item->vendor_account_id == $user_account_id ? 'to ' : 'from ') . $item->user->name }}
+                                                {{ ($item->vendor_account_id == $user_account_id ? 'to ' : 'from ') . ($item->user->name ?? 'N/A') }}
                                             </h6>
                                             <p class="text-primary mb-2">{{ date('M d, Y', strtotime($item->created_at)) }}
                                             </p>
