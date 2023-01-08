@@ -36,6 +36,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'usd_wallet',
         'gbp_wallet',
         'ngn_wallet',
+        'ref_ngn_wallet',
         'image',
         'is_verified',
         'birthdate',
@@ -109,6 +110,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Attribute::make(
             get: fn($val, $attr) => '₦ '.number_format($attr['ngn_wallet'],2)
+        );
+    }
+    protected function getRefNgnWallet(): Attribute
+    {
+        return Attribute::make(
+            get: fn($val, $attr) => '₦ '.number_format($attr['ref_ngn_wallet'],2)
         );
     }
     protected function getUserImage(): Attribute

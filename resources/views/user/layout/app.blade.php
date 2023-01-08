@@ -15,6 +15,9 @@
             max-width: 100px;
             width: 100%;
         }
+        .nav-link {
+            white-space: unset !important;
+        }
     </style>
     @yield('css')
 </head>

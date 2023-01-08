@@ -2,32 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\GeneralEmailNotification;
 use App\Mail\GeneralEmail;
+use App\Models\ReferralWithdrawLog;
 use App\Models\Setting;
 use App\Models\User;
-use App\Models\Withdraw;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class WithdrawController extends Controller
+class ReferralWithdrawController extends Controller
 {
     public function index()
     {
-        $withdraws = Withdraw::with('user', 'bank_user')->latest('id')->get();
-        return view('admin.withdraws.index', compact('withdraws'));
+        $withdraws = ReferralWithdrawLog::with('user', 'bank_user')->latest('id')->get();
+        return view('admin.referral_withdraws.index', compact('withdraws'));
     }
     public function unpaid()
     {
-        $withdraws = Withdraw::with('user', 'bank_user')->where('status', 0)->latest('id')->get();
-        return view('admin.withdraws.index', compact('withdraws'));
+        $withdraws = ReferralWithdrawLog::with('user', 'bank_user')->where('status', 0)->latest('id')->get();
+        return view('admin.referral_withdraws.index', compact('withdraws'));
+    }
+    public function approved()
+    {
+        $withdraws = ReferralWithdrawLog::with('user', 'bank_user')->whereStatus('1')->latest('id')->get();
+        return view('admin.referral_withdraws.approved', compact('withdraws'));
+    }
+    public function declined()
+    {
+        $withdraws = ReferralWithdrawLog::with('user')->whereStatus('2')->latest('id')->get();
+        return view('admin.referral_withdraws.declined', compact('withdraws'));
     }
     public function approve(Request $request)
     {
         try {
             //code...
-            $data = Withdraw::findOrFail($request->id);
+            $data = ReferralWithdrawLog::findOrFail($request->id);
             $user = User::find($data->user_id);
             if ($request->payment_value) {
                 $payment_value = $request->payment_value;
@@ -38,13 +47,13 @@ class WithdrawController extends Controller
             $remainder_amount = 0;
             if ($request->payment == 1) {
                 if ($payment_value > $data->amount) {
-                    return back()->with('alert', 'The withdrawal amount is less than your input amount!');
+                    return back()->with('alert', 'The referral withdrawal amount is less than your input amount!');
                 }
                 $remainder_amount = $data->amount - $payment_value;
             }
             $user->update([
                 'show_popup' => 1,
-                'ngn_wallet' => $user->ngn_wallet + $remainder_amount
+                'ref_ngn_wallet' => $user->ref_ngn_wallet + $remainder_amount
             ]);
             $res = $data->update([
                 'status' => '1',
@@ -69,7 +78,7 @@ class WithdrawController extends Controller
             // if ($set->email_notify == 1) {
             //     $temp = Etemplate::first();
             // }          
-            Mail::to($user->email)->send(new GeneralEmail($user->name, 'Withdrawal request of ₦' . substr($data->amount, 0, 9) . ' has been approved<br>Thanks for working with us.', 'Withdraw Request has been approved', 1));
+            Mail::to($user->email)->send(new GeneralEmail($user->name, 'Referral Withdrawal request of ₦' . substr($data->amount, 0, 9) . ' has been approved<br>Thanks for working with us.', 'Withdraw Request has been approved', 1));
 
             // Notification::create([
             //     'user_id' => $user->id,
@@ -77,26 +86,20 @@ class WithdrawController extends Controller
             //     'msg' => 'Your Withdrawal Request from your Affliate Balance has been APPROVED. Kindly POST your Payment Credit ALERT!',
             //     'is_read' => 0
             // ]);
-            return redirect()->route('admin.withdraws.index')->with('success', 'Request was Successfully approved!');
+            return redirect()->route('admin.referral_withdraws.index')->with('success', 'Request was Successfully approved!');
         } catch (\Throwable $th) {
             //throw $th;
             Log::error($th->getMessage());
-            return redirect()->route('admin.withdraws.index')->with('error', 'Problem With Approving Request');
+            return redirect()->route('admin.referral_withdraws.index')->with('error', 'Problem With Approving Request');
         }
-    }
-
-    public function approved()
-    {
-        $withdraws = Withdraw::with('user', 'bank_user')->whereStatus('1')->latest('id')->get();
-        return view('admin.withdraws.approved', compact('withdraws'));
     }
 
     public function delete($id)
     {
-        $data = Withdraw::findOrFail($id);
+        $data = ReferralWithdrawLog::findOrFail($id);
         // return json_encode($data->status == '0');
         if ($data->status == '0') {
-            return back()->with('alert', 'You cannot delete an unpaid withdraw request');
+            return back()->with('alert', 'You cannot delete an unpaid referral withdraw request');
         } else {
             $res =  $data->delete();
             if ($res) {
@@ -111,15 +114,15 @@ class WithdrawController extends Controller
     {
         try {
             //code...
-            $data = Withdraw::findOrFail($id);
+            $data = ReferralWithdrawLog::findOrFail($id);
             $user = User::find($data->user_id);
             $set = Setting::first();
             $res = $data->update(['status' => '2']);
-            $user->update(['ngn_wallet' => $user->ngn_wallet + $data->amount]);
+            $user->update(['ref_ngn_wallet' => $user->ref_ngn_wallet + $data->amount]);
             // if ($set->email_notify == 1) {
             //     $temp = Etemplate::first();
             // }
-            Mail::to($user->email)->send(new GeneralEmail($user->name, 'Withdrawal request of ₦' . substr($data->amount, 0, 9) . ' has been declined<br>Thanks for working with us.', 'Withdraw Request has been declined'));
+            Mail::to($user->email)->send(new GeneralEmail($user->name, 'Referral Withdrawal request of ₦' . substr($data->amount, 0, 9) . ' has been declined<br>Thanks for working with us.', 'Withdraw Request has been declined', 1));
             // Notification::create([
             //     'user_id' => $user->id,
             //     'title' => 'Affliate Balance WITHDRAWAL - DECLINED - NGN' . $data->amount,
@@ -130,13 +133,8 @@ class WithdrawController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
             Log::error($th->getMessage());
-            return redirect()->route('admin.withdraws.index')->with('error', 'Problem With Approving Request');
+            return redirect()->route('admin.referral_withdraws.index')->with('error', 'Problem With Approving Request');
         }
     }
 
-    public function declined()
-    {
-        $data['withdraws'] = Withdraw::with('user')->whereStatus('2')->latest('id')->get();
-        return view('admin.withdraws.declined', $data);
-    }
 }

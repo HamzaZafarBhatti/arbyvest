@@ -82,6 +82,24 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label class="col-form-label col-lg-2">Referral Withdraw Fee:</label>
+                                <div class="col-lg-10">
+                                    <input type="number" name="referral_withdraw_fee" value="{{ $set->referral_withdraw_fee }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-lg-2">Min Referral Withdrawal:</label>
+                                <div class="col-lg-10">
+                                    <input type="number" name="min_withdrawal_referral" value="{{ $set->min_withdrawal_referral }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-lg-2">Max Referral Withdrawal:</label>
+                                <div class="col-lg-10">
+                                    <input type="number" name="max_withdrawal_referral" value="{{ $set->max_withdrawal_referral }}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-form-label col-lg-2">USD Black Market Counter (Hours):</label>
                                 <div class="col-lg-10">
                                     <input type="number" name="usd_black_market_counter" value="{{ $set->usd_black_market_counter }}" class="form-control">

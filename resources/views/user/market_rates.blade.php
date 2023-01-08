@@ -45,7 +45,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (!$market_prices->isEmpty())
+                                @if ($market_prices->isNotEmpty())
                                     @foreach ($market_prices as $item)
                                         <tr>
                                             <td>{{ $item->currency }}</td>

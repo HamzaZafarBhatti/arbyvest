@@ -53,7 +53,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <div class="card shining-card">
                                 <div class="card-body text-center text-md-start">
                                     <img src="{{ asset('asset/user/images/flags/usa.svg') }}"
@@ -72,14 +72,14 @@
                                         </a>
                                     </div>
                                     <div class="pt-2">
-                                        <a href="#" class="btn btn-primary w-100" type="button">
+                                        <a href="{{ route('user.sell_to_blackmarket') }}" class="btn btn-primary w-100" type="button">
                                             Sell to Black Market
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <div class="card shining-card">
                                 <div class="card-body text-center text-md-start">
                                     <img src="{{ asset('asset/user/images/flags/uk.svg') }}"
@@ -98,14 +98,14 @@
                                         </a>
                                     </div>
                                     <div class="pt-2">
-                                        <a href="#" class="btn btn-primary w-100" type="button">
+                                        <a href="{{ route('user.sell_to_blackmarket') }}" class="btn btn-primary w-100" type="button">
                                             Sell to Black Market
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <div class="card shining-card">
                                 <div class="card-body text-center text-md-start">
                                     <img src="{{ asset('asset/user/images/flags/nigeria.svg') }}"
@@ -119,8 +119,29 @@
                                         </h4>
                                     </div>
                                     <div class="pt-2">
-                                        <a href="#" class="btn btn-primary w-100" type="button">
+                                        <a href="{{ route('user.withdraw') }}" class="btn btn-primary w-100" type="button">
                                             Withdraw to Bank
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card shining-card">
+                                <div class="card-body text-center text-md-start">
+                                    <img src="{{ asset('asset/user/images/flags/nigeria.svg') }}"
+                                        class="img-fluid avatar avatar-70" alt="img60">
+                                    <br class="d-block d-md-none">
+                                    <span class="fs-5 me-2">Refferal Earnings</span>
+                                    <small><a href="#">wallet</a></small>
+                                    <div class="pt-2">
+                                        <h4 style="visibility: visible;">Refferal Balance</h4>
+                                        <h4 class="counter" style="visibility: visible;">{{ auth()->user()->getRefNgnWallet }}
+                                        </h4>
+                                    </div>
+                                    <div class="pt-2">
+                                        <a href="{{ route('user.withdraw') }}" class="btn btn-primary w-100" type="button">
+                                            Withdraw to Refferal Earnings
                                         </a>
                                     </div>
                                 </div>
@@ -143,7 +164,7 @@
                 </div>
                 <div class="card-body">
                     <ul class="list-inline m-0 p-0">
-                        @if (count($transfer_logs) > 0)
+                        @if ($transfer_logs->isNotEmpty())
                             @foreach ($transfer_logs as $item)
                                 <li class="d-flex  align-items-center pt-3">
                                     <div class="d-flex justify-content-between rounded-pill">
@@ -175,7 +196,7 @@
                 </div>
                 <div class="card-body">
                     <ul class="list-inline m-0 p-0">
-                        @if (count($blackmarket_logs) > 0)
+                        @if ($blackmarket_logs->isNotEmpty())
                             @foreach ($blackmarket_logs as $item)
                                 <li class="d-flex  align-items-center pt-3">
                                     <div class="d-flex justify-content-between rounded-pill">
@@ -202,7 +223,7 @@
                 </div>
                 <div class="card-body">
                     <ul class="list-inline m-0 p-0">
-                        @if (count($withdraws) > 0)
+                        @if ($withdraws->isNotEmpty())
                             @foreach ($withdraws as $item)
                                 <li class="d-flex  align-items-center pt-3">
                                     <div class="d-flex justify-content-between rounded-pill">

@@ -10,6 +10,7 @@ use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\MarketPriceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReferralWithdrawController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
@@ -100,6 +101,15 @@ Route::middleware('auth')->group(function () {
             Route::post('approve', 'approve')->name('approve');
             Route::get('delete/{id}', 'delete')->name('delete');
         });
+        Route::controller(ReferralWithdrawController::class)->prefix('referral_withdraws')->name('referral_withdraws.')->group(function() {
+            Route::get('/', 'index')->name('index');
+            Route::get('unpaid', 'unpaid')->name('unpaid');
+            Route::get('approved', 'approved')->name('approved');
+            Route::get('declined', 'declined')->name('declined');
+            Route::get('decline/{id}', 'decline')->name('decline');
+            Route::post('approve', 'approve')->name('approve');
+            Route::get('delete/{id}', 'delete')->name('delete');
+        });
         Route::resource('banks', BankController::class)->except('create', 'show');
         Route::resource('market_prices', MarketPriceController::class)->except('create', 'show');
         Route::resource('roles', RoleController::class)->except('create', 'show', 'delete');
@@ -140,6 +150,8 @@ Route::middleware('auth')->group(function () {
                 Route::post('change_pin', 'do_change_pin')->name('do_change_pin');
                 Route::get('withdraw', 'withdraw')->name('withdraw');
                 Route::post('withdraw', 'do_withdraw')->name('do_withdraw');
+                Route::get('withdraw_referral', 'withdraw_referral')->name('withdraw_referral');
+                Route::post('withdraw_referral', 'do_withdraw_referral')->name('do_withdraw_referral');
                 Route::get('sell_to_blackmarket', 'sell_to_blackmarket')->name('sell_to_blackmarket');
                 Route::post('sell_to_blackmarket', 'do_sell_to_blackmarket')->name('do_sell_to_blackmarket');
                 Route::post('get_amount_exchanged', 'get_amount_exchanged')->name('get_amount_exchanged');

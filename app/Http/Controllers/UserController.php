@@ -8,6 +8,7 @@ use App\Models\BankUser;
 use App\Models\BlackmarketLog;
 use App\Models\MarketPrice;
 use App\Models\ReferralLog;
+use App\Models\ReferralWithdrawLog;
 use App\Models\Setting;
 use App\Models\TransferBalanceLog;
 use App\Models\User;
@@ -57,7 +58,7 @@ class UserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         $parent_id = null;
-        if($request->has('referral')) {
+        if ($request->has('referral')) {
             $request->validate([
                 'referral' => ['required', 'string']
             ]);
@@ -157,15 +158,21 @@ class UserController extends Controller
             $logdata['user_account_id'] = strtolower($request->account_id);
             $user_usd_wallet = $user->usd_wallet - $request->amount;
             $customer_usd_wallet = $customer->usd_wallet + $request->amount;
-            DB::transaction(function () use ($user_usd_wallet, $customer_usd_wallet, $logdata, $user, $customer, $setting) {
-                $user->update(['usd_wallet' => $user_usd_wallet]);
+            $market_price = MarketPrice::whereSymbol('$')->pluck('local_rate');
+            $amount = ($logdata['amount'] * $setting->usd_referral_bonus / 100) * $market_price[0];
+            DB::transaction(function () use ($user_usd_wallet, $customer_usd_wallet, $logdata, $user, $customer, $amount) {
+                $user_data['usd_wallet'] = $user_usd_wallet;
                 $customer->update(['usd_wallet' => $customer_usd_wallet]);
-                if(!empty($customer->parent)) {
-                    ReferralLog::firstOrCreate(
-                        ['upline_id' => $customer->parent->id, 'downline_id' => $customer->id],
-                        ['currency' => $logdata['currency'], 'amount' => $logdata['amount'] * $setting->usd_referral_bonus / 100, 'type' => 1]
-                    );
+                if (!empty($customer->parent)) {
+                    $referral_log = ReferralLog::where('upline_id', $customer->parent->id)->where('downline_id', $customer->id)->first();
+                    if (empty($referral_log)) {
+                        ReferralLog::create([
+                            'upline_id' => $customer->parent->id, 'downline_id' => $customer->id, 'currency' => '₦', 'amount' => $amount, 'type' => 1
+                        ]);
+                        $user_data['ref_ngn_wallet'] = $user->ref_ngn_wallet + $amount;
+                    }
                 }
+                $user->update($user_data);
                 TransferBalanceLog::create($logdata);
             });
             $amount = '$ ' . $request->amount;
@@ -183,15 +190,21 @@ class UserController extends Controller
             $logdata['user_account_id'] = strtolower($request->account_id);
             $user_gbp_wallet = $user->gbp_wallet - $request->amount;
             $customer_gbp_wallet = $customer->gbp_wallet + $request->amount;
-            DB::transaction(function () use ($user_gbp_wallet, $customer_gbp_wallet, $logdata, $user, $customer, $setting) {
-                $user->update(['gbp_wallet' => $user_gbp_wallet]);
+            $market_price = MarketPrice::whereSymbol('£')->pluck('local_rate');
+            $amount = ($logdata['amount'] * $setting->gbp_referral_bonus / 100) * $market_price[0];
+            DB::transaction(function () use ($user_gbp_wallet, $customer_gbp_wallet, $logdata, $user, $customer, $amount) {
+                $user_data['gbp_wallet'] = $user_gbp_wallet;
                 $customer->update(['gbp_wallet' => $customer_gbp_wallet]);
-                if(!empty($customer->parent)) {
-                    ReferralLog::firstOrCreate(
-                        ['upline_id' => $customer->parent->id, 'downline_id' => $customer->id],
-                        ['currency' => $logdata['currency'], 'amount' => $logdata['amount'] * $setting->gbp_referral_bonus / 100, 'type' => 1]
-                    );
+                if (!empty($customer->parent)) {
+                    $referral_log = ReferralLog::where('upline_id', $customer->parent->id)->where('downline_id', $customer->id)->first();
+                    if (empty($referral_log)) {
+                        ReferralLog::create([
+                            'upline_id' => $customer->parent->id, 'downline_id' => $customer->id, 'currency' => '₦', 'amount' => $amount, 'type' => 1
+                        ]);
+                        $user_data['ref_ngn_wallet'] = $user->ref_ngn_wallet + $amount;
+                    }
                 }
+                $user->update($user_data);
                 TransferBalanceLog::create($logdata);
             });
             $amount = '£ ' . $request->amount;
@@ -258,6 +271,67 @@ class UserController extends Controller
             Mail::to($user->email)->send(new GeneralEmail($user->name, 'Withdrawal request of ₦' . substr($data->amount, 0, 9) . ' is pending<br>Thanks for working with us.', 'Withdraw Request is pending'));
         });
         return redirect()->route('user.withdraw')->with('success', 'Amount ₦' . number_format($actual_amount, 2) . ' Withdrawed to your Bank Account: ' . $bank_user->get_full_account);
+    }
+
+    public function withdraw_referral()
+    {
+        $user_bank_details = BankUser::with('bank')->where('user_id', auth()->user()->id)->first();
+        $withdraws = ReferralWithdrawLog::where('user_id', auth()->user()->id)->get();
+        // return $withdraws;
+        return view('user.withdraw_referral', compact('user_bank_details', 'withdraws'));
+    }
+
+    public function do_withdraw_referral(Request $request)
+    {
+        // $today = Carbon::now();
+        // $day_of_week = $today->format('l');
+        // if ($day_of_week != 'Sunday') {
+        //     return back()->with('warning', 'You can request to withdraw every Sunday to your BANK Account only.');
+        // }
+        // if ($today->hour < 7 || $today->hour > 10) {
+        //     return back()->with('warning', 'You can cashout your Video Earning Points from 7am to 10am.');
+        // }
+        $request->validate([
+            'amount' => 'required|integer|min:10',
+            'bank_user_id' => 'required',
+            'pin' => 'required'
+        ]);
+        $bank_user = BankUser::find($request->bank_user_id);
+        $user = auth()->user();
+        $setting = Setting::first();
+        if (!$user->is_verified) {
+            return back()->with('error', 'Your account is not verified!');
+        }
+        if (!$user->pin) {
+            return back()->with('error', 'Please setup your Pin!');
+        }
+        if ($user->pin != $request->pin) {
+            return back()->with('error', 'You have entered wrong Pin!');
+        }
+        $actual_amount = $request->amount;
+        $bank_user_id = $request->bank_user_id;
+        $after_fee_amount = $actual_amount - ($actual_amount * $setting->referral_withdraw_fee / 100);
+        // return $after_fee_amount;
+        if ($actual_amount < $setting->min_withdrawal_referral) {
+            return back()->with('error', 'Minimum amount to withdraw is ₦' . $setting->min_withdrawal_referral);
+        }
+        if ($actual_amount > $user->ref_ngn_wallet) {
+            return back()->with('error', 'Your entered amount is more than your NGN balance');
+        }
+        if ($actual_amount > $setting->max_withdrawal_referral) {
+            return back()->with('error', 'Maximum amount to withdraw is ₦' . $setting->max_withdrawal_referral);
+        }
+        DB::transaction(function () use ($user, $actual_amount, $after_fee_amount, $bank_user_id) {
+            $user->update(['ref_ngn_wallet' => $user->ref_ngn_wallet - $actual_amount]);
+            $data = ReferralWithdrawLog::create([
+                'user_id' => $user->id,
+                'bank_user_id' => $bank_user_id,
+                'amount' => $after_fee_amount,
+                'status' => 0
+            ]);
+            Mail::to($user->email)->send(new GeneralEmail($user->name, 'Referral Withdrawal request of ₦' . substr($data->amount, 0, 9) . ' is pending<br>Thanks for working with us.', 'Withdraw Request is pending', 1));
+        });
+        return redirect()->route('user.withdraw_referral')->with('success', 'Amount ₦' . number_format($actual_amount, 2) . ' Withdrawed to your Bank Account: ' . $bank_user->get_full_account);
     }
 
     public function sell_to_blackmarket()

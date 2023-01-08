@@ -1,16 +1,13 @@
 @extends('user.layout.app')
 
-@section('title', 'Withdraw')
-
-@section('css')
-@endsection
+@section('title', 'Referral Withdraw')
 
 @section('content')
     @include('user.partials.user_verfication_notice')
     <div class="card">
         <div class="card-header">
             <div class="header-title">
-                <h3 class="card-title pb-3">Withdraw NGN from your Naira Wallet to Bank Account</h3>
+                <h3 class="card-title pb-3">Withdraw Referral Earnings to Bank Account</h3>
             </div>
         </div>
         <div class="card-body">
@@ -18,11 +15,11 @@
                 <img src="{{ asset('asset/user/images/flags/nigeria.svg') }}" class="img-fluid avatar avatar-70"
                     alt="img60">
                 <br class="d-block d-md-none">
-                <span class="fs-5 me-2">Nigerian Naira</span>
+                <span class="fs-5 me-2">Refferal Earnings</span>
                 <small><a href="#">wallet</a></small>
                 <div class="pt-2">
-                    <h4 style="visibility: visible;">NGN Balance</h4>
-                    <h4 class="counter" style="visibility: visible;">{{ auth()->user()->getNgnWallet }}</h4>
+                    <h4 style="visibility: visible;">Refferal Balance</h4>
+                    <h4 class="counter" style="visibility: visible;">{{ auth()->user()->getRefNgnWallet }}</h4>
                 </div>
             </div>
             <form action="{{ route('user.do_withdraw_referral') }}" method="post">

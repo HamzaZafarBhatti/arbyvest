@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 
-@section('title', 'Declined Withdraw List')
+@section('title', 'Declined Referral Withdraw List')
 
 @section('content')
     <div class="content">
@@ -8,7 +8,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header header-elements-inline">
-                        <h6 class="card-title font-weight-semibold">Declined Withdraw logs</h6>
+                        <h6 class="card-title font-weight-semibold">Declined Referral Withdraw logs</h6>
                     </div>
                     <div class="">
                         <table class="table datatable-show-all">
@@ -58,7 +58,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-                                                <a  href="{{ route('admin.withdraws.delete', $val->id) }}" class="btn bg-danger">Proceed</a>
+                                                <a  href="{{ route('admin.referral_withdraws.delete', $val->id) }}" class="btn bg-danger">Proceed</a>
                                             </div>
                                         </div>
                                     </div>

@@ -144,7 +144,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($logs)
+                        @if ($logs->isNotEmpty())
                             @foreach ($logs as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
