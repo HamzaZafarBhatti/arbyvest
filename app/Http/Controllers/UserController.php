@@ -161,7 +161,7 @@ class UserController extends Controller
             $market_price = MarketPrice::whereSymbol('$')->pluck('local_rate');
             $amount = ($logdata['amount'] * $setting->usd_referral_bonus / 100) * $market_price[0];
             DB::transaction(function () use ($user_usd_wallet, $customer_usd_wallet, $logdata, $user, $customer, $amount) {
-                $user_data['usd_wallet'] = $user_usd_wallet;
+                $user->update(['usd_wallet' => $user_usd_wallet]);
                 $customer->update(['usd_wallet' => $customer_usd_wallet]);
                 if (!empty($customer->parent)) {
                     $referral_log = ReferralLog::where('upline_id', $customer->parent->id)->where('downline_id', $customer->id)->first();
@@ -169,10 +169,9 @@ class UserController extends Controller
                         ReferralLog::create([
                             'upline_id' => $customer->parent->id, 'downline_id' => $customer->id, 'currency' => '₦', 'amount' => $amount, 'type' => 1
                         ]);
-                        $user_data['ref_ngn_wallet'] = $user->ref_ngn_wallet + $amount;
+                        $customer->parent->update(['ref_ngn_wallet' => $user->ref_ngn_wallet + $amount]);
                     }
                 }
-                $user->update($user_data);
                 TransferBalanceLog::create($logdata);
             });
             $amount = '$ ' . $request->amount;
@@ -193,7 +192,7 @@ class UserController extends Controller
             $market_price = MarketPrice::whereSymbol('£')->pluck('local_rate');
             $amount = ($logdata['amount'] * $setting->gbp_referral_bonus / 100) * $market_price[0];
             DB::transaction(function () use ($user_gbp_wallet, $customer_gbp_wallet, $logdata, $user, $customer, $amount) {
-                $user_data['gbp_wallet'] = $user_gbp_wallet;
+                $user->update(['gbp_wallet' => $user_gbp_wallet]);
                 $customer->update(['gbp_wallet' => $customer_gbp_wallet]);
                 if (!empty($customer->parent)) {
                     $referral_log = ReferralLog::where('upline_id', $customer->parent->id)->where('downline_id', $customer->id)->first();
@@ -201,10 +200,9 @@ class UserController extends Controller
                         ReferralLog::create([
                             'upline_id' => $customer->parent->id, 'downline_id' => $customer->id, 'currency' => '₦', 'amount' => $amount, 'type' => 1
                         ]);
-                        $user_data['ref_ngn_wallet'] = $user->ref_ngn_wallet + $amount;
+                        $customer->parent->update(['ref_ngn_wallet' => $user->ref_ngn_wallet + $amount]);
                     }
                 }
-                $user->update($user_data);
                 TransferBalanceLog::create($logdata);
             });
             $amount = '£ ' . $request->amount;
