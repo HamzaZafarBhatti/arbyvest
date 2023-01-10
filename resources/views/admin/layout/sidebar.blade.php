@@ -241,14 +241,14 @@
                                     class="icon-newspaper"></i>Articles</a></li>
                     </ul>
                 </li> --}}
-            {{-- <li class="nav-item nav-item-submenu">
+            <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link"><i class="icon-home4"></i> <span>Web
                             control</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="News Section">
-                        <li class="nav-item"><a href="{{ route('admin.review') }}" class="nav-link"><i
-                                    class="icon-clipboard6"></i>Platform Review</a></li>
-                        <li class="nav-item"><a href="{{ route('admin.vendors.index') }}" class="nav-link"><i
+                        <li class="nav-item"><a href="{{ route('admin.content_pages.edit', ['page' => 'exclusive_offers']) }}" class="nav-link"><i
+                                    class="icon-clipboard6"></i>Exclusive Offers</a></li>
+                        {{-- <li class="nav-item"><a href="{{ route('admin.vendors.index') }}" class="nav-link"><i
                                     class="icon-accessibility"></i>Vendors</a></li>
                         <li class="nav-item"><a href="{{ route('admin.faq') }}" class="nav-link"><i
                                     class="icon-question4"></i>FAQs</a></li>
@@ -260,9 +260,9 @@
                         <li class="nav-item"><a href="{{ route('admin.about_us') }}" class="nav-link"><i
                                     class="icon-file-check"></i>About us</a></li>
                         <li class="nav-item"><a href="{{ route('admin.social-links') }}" class="nav-link"><i
-                                    class="icon-share2"></i>Social Links</a></li>
+                                    class="icon-share2"></i>Social Links</a></li> --}}
                     </ul>
-                </li> --}}
+                </li>
             </ul>
         </div>
         <!-- /main navigation -->

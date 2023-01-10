@@ -6,6 +6,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Mail\GeneralEmail;
 use App\Models\BankUser;
 use App\Models\BlackmarketLog;
+use App\Models\ContentPage;
 use App\Models\MarketPrice;
 use App\Models\ReferralLog;
 use App\Models\ReferralWithdrawLog;
@@ -492,6 +493,13 @@ class UserController extends Controller
         $downlines = User::select('id', 'username', 'email')->withOnly('downline_referral_log')->where('parent_id', auth()->user()->id)->get();
         // return $downlines;
         return view('user.referrals', compact('downlines'));
+    }
+
+    public function exclusive_offers()
+    {
+        $page = ContentPage::where('key', 'exclusive_offers')->first();
+        // return $page;
+        return view('user.exclusive_offers', compact('page'));
     }
 
     public function logout(Request $request)

@@ -12,3 +12,5 @@
 <script src="{{ asset('asset/admin/global_assets/js/plugins/ui/ripple.min.js') }}"></script>
 <script src="{{ asset('asset/admin/global_assets/js/plugins/ui/prism.min.js') }}"></script>
 <script src="{{ asset('asset/admin/user/assets/js/app.js') }}"></script>
+<script src="{{ asset('asset/admin/tinymce/tinymce.min.js') }}"></script>
+<script src="{{ asset('asset/admin/tinymce/init-tinymce.js') }}"></script>

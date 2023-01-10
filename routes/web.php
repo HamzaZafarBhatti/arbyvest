@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\ContentPageController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\MarketPriceController;
@@ -110,7 +111,13 @@ Route::middleware('auth')->group(function () {
             Route::post('approve', 'approve')->name('approve');
             Route::get('delete/{id}', 'delete')->name('delete');
         });
+        Route::controller(ContentPageController::class)->prefix('content_pages')->name('content_pages.')->group(function() {
+            Route::get('edit/{page}', 'edit')->name('edit');
+            Route::post('update/{page}', 'update')->name('update');
+
+        });
         Route::resource('banks', BankController::class)->except('create', 'show');
+        // Route::resource('content_pages', ContentPageController::class)->except('show', 'index');
         Route::resource('market_prices', MarketPriceController::class)->except('create', 'show');
         Route::resource('roles', RoleController::class)->except('create', 'show', 'delete');
         Route::resource('users', AdminUserController::class)->except('create', 'show', 'delete');
@@ -158,6 +165,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('upload_proof', 'upload_proof')->name('upload_proof');
                 Route::get('thankyou', 'thankyou')->name('thankyou');
                 Route::get('referral', 'referral')->name('referral');
+                Route::get('exclusive_offers', 'exclusive_offers')->name('exclusive_offers');
             });
             Route::controller(ProfileController::class)->group(function () {
                 Route::get('profile', 'edit')->name('profile.edit');
