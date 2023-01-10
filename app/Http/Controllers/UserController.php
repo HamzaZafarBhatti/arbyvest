@@ -200,7 +200,7 @@ class UserController extends Controller
                         ReferralLog::create([
                             'upline_id' => $customer->parent->id, 'downline_id' => $customer->id, 'currency' => '₦', 'amount' => $amount, 'type' => 1
                         ]);
-                        $customer->parent->update(['ref_ngn_wallet' => $user->ref_ngn_wallet + $amount]);
+                        $customer->parent->update(['ref_ngn_wallet' => $customer->parent->ref_ngn_wallet + $amount]);
                     }
                 }
                 TransferBalanceLog::create($logdata);
